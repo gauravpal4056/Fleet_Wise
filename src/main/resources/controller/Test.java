@@ -6,22 +6,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
- * Servlet implementation class serve
+ * Servlet implementation class Test
  */
-
-@WebServlet(value = "/Simple") 
-public class serve extends HttpServlet {
+public class Test extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public serve() {
+    public Test() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,15 +26,7 @@ public class serve extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-	     
-		List<String> dataList = new ArrayList<>();
-        dataList.add("Data 1");
-        dataList.add("Data 2");
-        dataList.add("Data 3");
-        
-        request.setAttribute("dataList", dataList);
-        request.getRequestDispatcher("demo.jsp").forward(request, response);
-        //response.sendRedirect("demo.jsp");
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
