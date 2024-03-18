@@ -29,7 +29,7 @@
 	                      <div id='admin'  class='rounded text-center w-full  border-4 border-gray-300 py-1' >Admin</div>
 	                      <div id='driver' class='rounded text-center w-full border-2 border-gray-300  py-1' >Driver</div>
 	                    </div>
-	                    <form class="space-y-4 md:space-y-6" action="Test" method="post">
+	                    <form class="space-y-4 md:space-y-6" action="LoginServlet" method="post">
 	                      <div>	                          
 	                          <input  name="userName" id="userName" class="bg-gray-100 border-b-2  border-gray-300 text-gray-900 sm:text-sm  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   " placeholder="USERNAME" required="true" />
 	                      </div>

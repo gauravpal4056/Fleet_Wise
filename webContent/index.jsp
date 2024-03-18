@@ -1,3 +1,4 @@
+
 <%
 	if(session.getAttribute("user") == null){
 		response.sendRedirect("login.jsp");	}
@@ -12,6 +13,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	<h1>hiiii</h1>
 </body>
 </html>
