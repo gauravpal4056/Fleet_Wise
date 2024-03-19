@@ -16,8 +16,10 @@ public class DBConnection {
 		super();
 	}
 
-	public static DBConnection getDbConnnection() {
+	public static DBConnection getDbConnnection() throws ClassNotFoundException {
+		
 		if (dbConnnection == null) {
+			
 			synchronized (DBConnection.class) {
 				if (dbConnnection == null) {
 					dbConnnection = new DBConnection();

@@ -33,7 +33,7 @@
 	                      <div>	                          
 	                          <input  name="userName" id="userName" class="bg-gray-100 border-b-2  border-gray-300 text-gray-900 sm:text-sm  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   " placeholder="USERNAME" required="true" />
 	                      </div>
-	                      <input id='type' value='admin'  name="type" class='hidden' />
+	                      <input id='type' value='ADMIN'  name="type" class='hidden' />
 	                      <div>	                          
 	                          <input type="password" name="password" id="password" placeholder="*********" class="bg-gray-100 border-b-2  border-gray-300 text-gray-900 sm:text-sm  focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   " required="true" />
 	                      </div>
@@ -54,12 +54,12 @@
 	    <script>
 	      function selectAdmin() {
 	        document.getElementById('admin').style.cssText = 'border: 4px solid rgb(209 213 219) '
-	        document.getElementById('type').value = 'admin'
+	        document.getElementById('type').value = 'ADMIN'
 	        document.getElementById('driver').style.cssText = 'border: 2px solid rgb(209, 213, 219)'
 	      }
 	      function selectDriver() {
 	        document.getElementById('driver').style.cssText = 'border: 4px solid rgb(209 213 219)'
-	        document.getElementById('type').value = 'driver'
+	        document.getElementById('type').value = 'DRIVER'
 	        document.getElementById('admin').style.cssText = 'border: 2px solid rgb(209, 213, 219)'
 	      }
 	      
