@@ -11,7 +11,7 @@ public class Driver {
     private long phoneNumber;
     private String emailAddress;
     private String address;
-    private String joiningDate;
+    private String joiningDate; 
     private String available;
 	public Driver() {
 		super();

@@ -8,7 +8,7 @@ public class DBConnection {
 
 	private static DBConnection dbConnnection;
 	private final String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	private final String username = "assignmentUser";
+	private final String username = "fleet_wise";
 	private final String password = "root";
 	private Connection connection;
 
@@ -22,6 +22,7 @@ public class DBConnection {
 			
 			synchronized (DBConnection.class) {
 				if (dbConnnection == null) {
+		            Class.forName("oracle.jdbc.driver.OracleDriver");
 					dbConnnection = new DBConnection();
 				}
 			}

@@ -6,8 +6,8 @@ import java.util.Objects;
 public class Trip {
 	private int tripId;
 	//one to one
-    private Route routeId;
-    private Vehicle vehicleId;
+    private Route route;
+    private Vehicle vehicle;
     //one to many
     private List<Consignment> consignments;
     
@@ -18,12 +18,12 @@ public class Trip {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Trip(int tripId, Route routeId, Vehicle vehicleId, List<Consignment> consignments, String tripStartTime,
+	public Trip(int tripId, Route route, Vehicle vehicle, List<Consignment> consignments, String tripStartTime,
 			String tripEndTime, String remarks) {
 		super();
 		this.tripId = tripId;
-		this.routeId = routeId;
-		this.vehicleId = vehicleId;
+		this.route = route;
+		this.vehicle = vehicle;
 		this.consignments = consignments;
 		this.tripStartTime = tripStartTime;
 		this.tripEndTime = tripEndTime;
@@ -35,17 +35,17 @@ public class Trip {
 	public void setTripId(int tripId) {
 		this.tripId = tripId;
 	}
-	public Route getRouteId() {
-		return routeId;
+	public Route getRoute() {
+		return route;
 	}
-	public void setRouteId(Route routeId) {
-		this.routeId = routeId;
+	public void setRoute(Route route) {
+		this.route = route;
 	}
-	public Vehicle getVehicleId() {
-		return vehicleId;
+	public Vehicle getVehicle() {
+		return vehicle;
 	}
-	public void setVehicleId(Vehicle vehicleId) {
-		this.vehicleId = vehicleId;
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
 	public List<Consignment> getConsignments() {
 		return consignments;
@@ -73,13 +73,12 @@ public class Trip {
 	}
 	@Override
 	public String toString() {
-		return "Trip [tripId=" + tripId + ", routeId=" + routeId + ", vehicleId=" + vehicleId + ", consignments="
-				+ consignments + ", tripStartTime=" + tripStartTime + ", tripEndTime=" + tripEndTime + ", remarks="
-				+ remarks + "]";
+		return "Trip [tripId=" + tripId + ", route=" + route + ", vehicle=" + vehicle + ", consignments=" + consignments
+				+ ", tripStartTime=" + tripStartTime + ", tripEndTime=" + tripEndTime + ", remarks=" + remarks + "]";
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(consignments, remarks, routeId, tripEndTime, tripId, tripStartTime, vehicleId);
+		return Objects.hash(consignments, remarks, route, tripEndTime, tripId, tripStartTime, vehicle);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -91,13 +90,10 @@ public class Trip {
 			return false;
 		Trip other = (Trip) obj;
 		return Objects.equals(consignments, other.consignments) && Objects.equals(remarks, other.remarks)
-				&& Objects.equals(routeId, other.routeId) && Objects.equals(tripEndTime, other.tripEndTime)
+				&& Objects.equals(route, other.route) && Objects.equals(tripEndTime, other.tripEndTime)
 				&& tripId == other.tripId && Objects.equals(tripStartTime, other.tripStartTime)
-				&& Objects.equals(vehicleId, other.vehicleId);
+				&& Objects.equals(vehicle, other.vehicle);
 	}
-    
-    
-    
-    
-    
+	
+	
 }

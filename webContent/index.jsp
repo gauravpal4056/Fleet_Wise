@@ -14,5 +14,6 @@
 </head>
 <body>
 	<h1>hiiii</h1>
+	<a href="public/1_temp.jsp">mylink</a>
 </body>
 </html>

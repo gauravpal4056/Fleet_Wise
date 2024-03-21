@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration Form</title>
+  <link rel="stylesheet" href="admin-reg.css">
+
+  
+</head>
+<body>
+  <div class="body-form">
+    <div class="container oc">
+        <h2 class="hp">Add Driver</h2>
+        <form id="addDriverForm">
+         <div class="form-flex">
+            <div class="form-group">
+                <label for="driverName" class="lp">Name</label>
+                <input type="text" id="driverName" name="driverName" required placeholder="Name" class="li">
+              </div>
+              <div class="form-group">
+                <label for="driverAge" class="lp">Age</label>
+                <input type="number" id="driverAge" name="driverAge" required placeholder="Age">
+              </div>
+         </div>
+         
+         <div class="form-flex">
+            <div class="form-group">
+                <label for="driverEmail" class="lp">Email Address</label>
+                <input type="email" id="driverEmail" name="driverEmail" required placeholder="Email">
+              </div>
+              <div class="form-group">
+                <label for="driverPhone" class="lp">Phone Number</label>
+                <input type="tel" id="driverPhone" name="driverPhone" required placeholder="Phone number">
+              </div>
+         </div>
+         <div class="form-flex">
+            <div class="form-group">
+                <label for="licenceNumber" class="lp">License Number</label>
+                <input type="text" id="licenceNumber" name="licenceNumber" required placeholder="License number">
+              </div>
+              <div class="form-group">
+                <label for="driverGender" class="lp">Gender</label>
+                <select id="driverGender" name="driverGender" required>
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+         </div>
+              
+          
+          <button type="submit" class="bbp">Add Driver</button>
+        </form>
+        <div id="message"></div>
+      </div>
+ </div>
+  <script src="scripts.js"></script>
+</body>
+</html>
+

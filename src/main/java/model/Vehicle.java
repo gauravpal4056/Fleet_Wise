@@ -1,14 +1,11 @@
 package model;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Vehicle {
 	private int vehicleId;
 	//one to one
     private int driverId;
-    //one to many
-    private List<Issue> vehicleIssues;
     private String registrationNo;
     private String registrationDate;
     private String model;
@@ -22,13 +19,12 @@ public class Vehicle {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Vehicle(int vehicleId, int driverId, List<Issue> vehicleIssues, String registrationNo,
-			String registrationDate, String model, String fuelType, String lastMaintained,
-			int thresholdMaintenanceMonths, String nextMaintenance, String maintenanceDue, String status) {
+	public Vehicle(int vehicleId, int driverId, String registrationNo, String registrationDate, String model,
+			String fuelType, String lastMaintained, int thresholdMaintenanceMonths, String nextMaintenance,
+			String maintenanceDue, String status) {
 		super();
 		this.vehicleId = vehicleId;
 		this.driverId = driverId;
-		this.vehicleIssues = vehicleIssues;
 		this.registrationNo = registrationNo;
 		this.registrationDate = registrationDate;
 		this.model = model;
@@ -50,12 +46,6 @@ public class Vehicle {
 	}
 	public void setDriverId(int driverId) {
 		this.driverId = driverId;
-	}
-	public List<Issue> getVehicleIssues() {
-		return vehicleIssues;
-	}
-	public void setVehicleIssues(List<Issue> vehicleIssues) {
-		this.vehicleIssues = vehicleIssues;
 	}
 	public String getRegistrationNo() {
 		return registrationNo;
@@ -113,16 +103,16 @@ public class Vehicle {
 	}
 	@Override
 	public String toString() {
-		return "Vehicle [vehicleId=" + vehicleId + ", driverId=" + driverId + ", vehicleIssues=" + vehicleIssues
-				+ ", registrationNo=" + registrationNo + ", registrationDate=" + registrationDate + ", model=" + model
-				+ ", fuelType=" + fuelType + ", lastMaintained=" + lastMaintained + ", thresholdMaintenanceMonths="
-				+ thresholdMaintenanceMonths + ", nextMaintenance=" + nextMaintenance + ", maintenanceDue="
-				+ maintenanceDue + ", status=" + status + "]";
+		return "Vehicle [vehicleId=" + vehicleId + ", driverId=" + driverId + ", registrationNo=" + registrationNo
+				+ ", registrationDate=" + registrationDate + ", model=" + model + ", fuelType=" + fuelType
+				+ ", lastMaintained=" + lastMaintained + ", thresholdMaintenanceMonths=" + thresholdMaintenanceMonths
+				+ ", nextMaintenance=" + nextMaintenance + ", maintenanceDue=" + maintenanceDue + ", status=" + status
+				+ "]";
 	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(driverId, fuelType, lastMaintained, maintenanceDue, model, nextMaintenance,
-				registrationDate, registrationNo, status, thresholdMaintenanceMonths, vehicleId, vehicleIssues);
+				registrationDate, registrationNo, status, thresholdMaintenanceMonths, vehicleId);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -139,10 +129,7 @@ public class Vehicle {
 				&& Objects.equals(nextMaintenance, other.nextMaintenance)
 				&& Objects.equals(registrationDate, other.registrationDate)
 				&& Objects.equals(registrationNo, other.registrationNo) && Objects.equals(status, other.status)
-				&& thresholdMaintenanceMonths == other.thresholdMaintenanceMonths && vehicleId == other.vehicleId
-				&& Objects.equals(vehicleIssues, other.vehicleIssues);
+				&& thresholdMaintenanceMonths == other.thresholdMaintenanceMonths && vehicleId == other.vehicleId;
 	}
-    
-    
-    
+	
 }

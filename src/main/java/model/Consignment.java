@@ -1,13 +1,9 @@
 package model;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Consignment {
 	private int consignmentId;
-	//one to many
-	private List<Issue> consignmentIssues;
-	//one to one
     private Trip trip;
     private Hub hub;
     private String consignmentDate;
@@ -15,16 +11,15 @@ public class Consignment {
     private String consignmentAddress;
     private String status;
     
-    public Consignment() {
+	public Consignment() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Consignment(int consignmentId, List<Issue> issues, Trip trip, Hub hub, String consignmentDate,
-			String consignmentName, String consignmentAddress, String status) {
+	public Consignment(int consignmentId, Trip trip, Hub hub, String consignmentDate, String consignmentName,
+			String consignmentAddress, String status) {
 		super();
 		this.consignmentId = consignmentId;
-		this.consignmentIssues = issues;
 		this.trip = trip;
 		this.hub = hub;
 		this.consignmentDate = consignmentDate;
@@ -39,14 +34,6 @@ public class Consignment {
 
 	public void setConsignmentId(int consignmentId) {
 		this.consignmentId = consignmentId;
-	}
-
-	public List<Issue> getIssues() {
-		return consignmentIssues;
-	}
-
-	public void setIssues(List<Issue> issues) {
-		this.consignmentIssues = issues;
 	}
 
 	public Trip getTrip() {
@@ -99,15 +86,14 @@ public class Consignment {
 
 	@Override
 	public String toString() {
-		return "Consignment [consignmentId=" + consignmentId + ", issues=" + consignmentIssues + ", trip=" + trip + ", hub=" + hub
-				+ ", consignmentDate=" + consignmentDate + ", consignmentName=" + consignmentName
-				+ ", consignmentAddress=" + consignmentAddress + ", status=" + status + "]";
+		return "Consignment [consignmentId=" + consignmentId + ", trip=" + trip + ", hub=" + hub + ", consignmentDate="
+				+ consignmentDate + ", consignmentName=" + consignmentName + ", consignmentAddress="
+				+ consignmentAddress + ", status=" + status + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(consignmentAddress, consignmentDate, consignmentId, consignmentName, hub, consignmentIssues, status,
-				trip);
+		return Objects.hash(consignmentAddress, consignmentDate, consignmentId, consignmentName, hub, status, trip);
 	}
 
 	@Override
@@ -122,9 +108,8 @@ public class Consignment {
 		return Objects.equals(consignmentAddress, other.consignmentAddress)
 				&& Objects.equals(consignmentDate, other.consignmentDate) && consignmentId == other.consignmentId
 				&& Objects.equals(consignmentName, other.consignmentName) && Objects.equals(hub, other.hub)
-				&& Objects.equals(consignmentIssues, other.consignmentIssues) && Objects.equals(status, other.status)
-				&& Objects.equals(trip, other.trip);
+				&& Objects.equals(status, other.status) && Objects.equals(trip, other.trip);
 	}
     
-    
+	
 }

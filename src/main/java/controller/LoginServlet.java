@@ -5,10 +5,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.User;
+
 import java.io.IOException;
 
 import java.sql.*;
 
+import dao.UserDao;
 import utils.DBConnection;
 
 public class LoginServlet extends HttpServlet {
@@ -24,22 +28,23 @@ public class LoginServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userName = request.getParameter("userName");
+		String username = request.getParameter("userName");
         String password = request.getParameter("password");
         String idType = request.getParameter("type").toUpperCase();
         
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-        	DBConnection dbConnection ;
-        	dbConnection = DBConnection.getDbConnnection();
-           PreparedStatement ps = dbConnection.getConnection().prepareStatement("select * from USERS where Username=? and PASSWORD=? and id_type = ?" );
-           ps.setString(1, userName);
-           ps.setString(2, password);
-           ps.setString(3, idType);
-           ResultSet rs = ps.executeQuery();
-            ps.setString(1, userName);
-            if (rs.next()) {
-            	request.setAttribute("user", rs.getString("id_type"));
+	    	DBConnection dbConnection ;
+	    	dbConnection = DBConnection.getDbConnnection();
+    		UserDao dao = new UserDao(dbConnection);
+    		User user = dao.findByUsernameAndPassword(username, password, idType);
+            if (user!=null) {
+            	System.out.println("FOUND");
+            	System.out.println(username.toString());
+            	HttpSession session = request.getSession();
+
+            	session.setAttribute("user", idType);
+            	
             } else {
             	System.out.println("NOT FOUND");
             }

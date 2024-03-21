@@ -4,10 +4,11 @@ import java.util.Objects;
 
 public class Issue {
 	private int issueId;
-    private Vehicle vehicleId;
-    //many to one
-    private Consignment consignmentId;
     private Driver driverId;
+
+    //many to one
+	private Vehicle vehicleId;
+    private Consignment consignmentId;
     private String description;
     private String raisedOn;
     private String resolvedOn;
