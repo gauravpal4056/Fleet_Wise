@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TripDao implements IDao<Trip> {
 
@@ -87,13 +86,9 @@ public class TripDao implements IDao<Trip> {
             statement.setInt(1, id);
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
     }
 
@@ -154,8 +149,8 @@ public class TripDao implements IDao<Trip> {
         trip.setTripEndTime(resultSet.getString("trip_End_Time"));
         trip.setRemarks(resultSet.getString("remarks"));
         ConsignmentDao consignmentDao = new ConsignmentDao(dbConnection);
-        List<Consignment> consignments = consignmentDao.getConsignmentsByTripId(resultSet.getInt("trip_Id"));
-        trip.setConsignments(consignments);
+        //List<Consignment> consignments = consignmentDao.getConsignmentsByTripId(resultSet.getInt("trip_Id"));
+        trip.setConsignments(null);
         return trip;
     }
     

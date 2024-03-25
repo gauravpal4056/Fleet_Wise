@@ -11,6 +11,7 @@ import java.util.List;
 
 import model.Driver;
 import utils.DBConnection;
+import utils.DateHandler;
 
 public class DriverDao implements IDao<Driver> {
 
@@ -65,7 +66,7 @@ public class DriverDao implements IDao<Driver> {
 			preparedStatement.setLong(5, driver.getPhoneNumber());
 			preparedStatement.setString(6, driver.getEmailAddress());
 			preparedStatement.setString(7, driver.getAddress());
-			preparedStatement.setString(8, driver.getJoiningDate());
+			preparedStatement.setDate(8, DateHandler.javaToSqlDate(driver.getJoiningDate()));
 			preparedStatement.setString(9, driver.getAvailable());
 			preparedStatement.setInt(10, id);
 			if(preparedStatement.executeUpdate()>0) {
@@ -106,7 +107,7 @@ public class DriverDao implements IDao<Driver> {
 		ResultSet resultSet=preparedStatement.executeQuery();
 		Driver driver=null;    
 		if(resultSet.next()) {
-			driver = new Driver(resultSet.getString(1),resultSet.getString(2),resultSet.getInt(3),resultSet.getString(4),resultSet.getLong(5),resultSet.getString(6),resultSet.getString(7),resultSet.getString(8));			
+        	driver = new Driver(resultSet.getInt(1), resultSet.getString(2),resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getLong(6),resultSet.getString(7),resultSet.getString(8),DateHandler.sqlDateToJava(resultSet.getDate(9)), resultSet.getString(10));
 		}
 		
 		return driver;
@@ -119,7 +120,7 @@ public class DriverDao implements IDao<Driver> {
         ResultSet resultSet = ps.executeQuery();
         Driver driver = null;
         if (resultSet.next()) {
-        	driver = new Driver(resultSet.getString(1),resultSet.getString(2),resultSet.getInt(3),resultSet.getString(4),resultSet.getLong(5),resultSet.getString(6),resultSet.getString(7),resultSet.getString(8));
+        	driver = new Driver(resultSet.getInt(1), resultSet.getString(2),resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getLong(6),resultSet.getString(7),resultSet.getString(8),DateHandler.sqlDateToJava(resultSet.getDate(9)), resultSet.getString(10));
         }
 		return driver;
 	}
@@ -132,12 +133,12 @@ public class DriverDao implements IDao<Driver> {
 
 		final String sqlQuery = "select * from drivers";
 		ResultSet resultSet = selectStatement.executeQuery(sqlQuery);
-
+        Driver driver = null;
 		while (resultSet.next()) {
 			//using column names
 //			driver driver = new driver(resultSet.getInt("driverId"), resultSet.getString("driverName"),resultSet.getString("email"));
 			// using column position in result
-			Driver driver = new Driver(resultSet.getString(1),resultSet.getString(2),resultSet.getInt(3),resultSet.getString(4),resultSet.getLong(5),resultSet.getString(6),resultSet.getString(7),resultSet.getString(8));
+        	driver = new Driver(resultSet.getInt(1), resultSet.getString(2),resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getLong(6),resultSet.getString(7),resultSet.getString(8),DateHandler.sqlDateToJava(resultSet.getDate(9)), resultSet.getString(10));
 			System.out.println(driver);
 			drivers.add(driver);
 
@@ -146,5 +147,27 @@ public class DriverDao implements IDao<Driver> {
 			return null;
 		return drivers;
 	}
+	
+	public List<Driver> findAllAvailable() throws SQLException {
+
+		Connection connection = dbConnection.getConnection();
+		Statement selectStatement = connection.createStatement();
+
+		final String sqlQuery = "select * from drivers where available='TRUE'";
+		ResultSet resultSet = selectStatement.executeQuery(sqlQuery);
+        Driver driver = null;
+		while (resultSet.next()) {
+			//using column names
+//			driver driver = new driver(resultSet.getInt("driverId"), resultSet.getString("driverName"),resultSet.getString("email"));
+			// using column position in result
+        	driver = new Driver(resultSet.getInt(1), resultSet.getString(2),resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getLong(6),resultSet.getString(7),resultSet.getString(8),DateHandler.sqlDateToJava(resultSet.getDate(9)), resultSet.getString(10));
+			drivers.add(driver);
+
+		}
+		if (drivers.isEmpty())
+			return null;
+		return drivers;
+	}
+	
 
 }

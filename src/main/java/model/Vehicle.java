@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Vehicle {
@@ -10,9 +11,9 @@ public class Vehicle {
     private String registrationDate;
     private String model;
     private String fuelType;
-    private String lastMaintained;
+    private Date lastMaintained;
     private int thresholdMaintenanceMonths;
-    private String nextMaintenance;
+    private Date nextMaintenance;
     private String maintenanceDue;
     private String status;
 	public Vehicle() {
@@ -20,7 +21,7 @@ public class Vehicle {
 		// TODO Auto-generated constructor stub
 	}
 	public Vehicle(int vehicleId, int driverId, String registrationNo, String registrationDate, String model,
-			String fuelType, String lastMaintained, int thresholdMaintenanceMonths, String nextMaintenance,
+			String fuelType, Date lastMaintained, int thresholdMaintenanceMonths, Date nextMaintenance,
 			String maintenanceDue, String status) {
 		super();
 		this.vehicleId = vehicleId;
@@ -71,10 +72,10 @@ public class Vehicle {
 	public void setFuelType(String fuelType) {
 		this.fuelType = fuelType;
 	}
-	public String getLastMaintained() {
+	public Date getLastMaintained() {
 		return lastMaintained;
 	}
-	public void setLastMaintained(String lastMaintained) {
+	public void setLastMaintained(Date lastMaintained) {
 		this.lastMaintained = lastMaintained;
 	}
 	public int getThresholdMaintenanceMonths() {
@@ -83,10 +84,10 @@ public class Vehicle {
 	public void setThresholdMaintenanceMonths(int thresholdMaintenanceMonths) {
 		this.thresholdMaintenanceMonths = thresholdMaintenanceMonths;
 	}
-	public String getNextMaintenance() {
+	public Date getNextMaintenance() {
 		return nextMaintenance;
 	}
-	public void setNextMaintenance(String nextMaintenance) {
+	public void setNextMaintenance(Date nextMaintenance) {
 		this.nextMaintenance = nextMaintenance;
 	}
 	public String getMaintenanceDue() {
@@ -131,5 +132,6 @@ public class Vehicle {
 				&& Objects.equals(registrationNo, other.registrationNo) && Objects.equals(status, other.status)
 				&& thresholdMaintenanceMonths == other.thresholdMaintenanceMonths && vehicleId == other.vehicleId;
 	}
+	
 	
 }

@@ -1,12 +1,13 @@
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Consignment {
 	private int consignmentId;
     private Trip trip;
     private Hub hub;
-    private String consignmentDate;
+    private Date consignmentDate;
 	private String consignmentName;
     private String consignmentAddress;
     private String status;
@@ -16,7 +17,7 @@ public class Consignment {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Consignment(int consignmentId, Trip trip, Hub hub, String consignmentDate, String consignmentName,
+	public Consignment(int consignmentId, Trip trip, Hub hub, Date consignmentDate, String consignmentName,
 			String consignmentAddress, String status) {
 		super();
 		this.consignmentId = consignmentId;
@@ -52,11 +53,11 @@ public class Consignment {
 		this.hub = hub;
 	}
 
-	public String getConsignmentDate() {
+	public Date getConsignmentDate() {
 		return consignmentDate;
 	}
 
-	public void setConsignmentDate(String consignmentDate) {
+	public void setConsignmentDate(Date consignmentDate) {
 		this.consignmentDate = consignmentDate;
 	}
 
@@ -110,6 +111,7 @@ public class Consignment {
 				&& Objects.equals(consignmentName, other.consignmentName) && Objects.equals(hub, other.hub)
 				&& Objects.equals(status, other.status) && Objects.equals(trip, other.trip);
 	}
-    
+
+	
 	
 }

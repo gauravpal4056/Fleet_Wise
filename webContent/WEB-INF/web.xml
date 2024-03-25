@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" id="WebApp_ID" version="6.0">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="6.0">
   <display-name>fleet_wise_v2</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
@@ -28,5 +28,55 @@
   <servlet-mapping>
     <servlet-name>ConsignmentServlet</servlet-name>
     <url-pattern>/ConsignmentServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RouteServlet</display-name>
+    <servlet-name>RouteServlet</servlet-name>
+    <servlet-class>controller.RouteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RouteServlet</servlet-name>
+    <url-pattern>/RouteServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>HubServlet</display-name>
+    <servlet-name>HubServlet</servlet-name>
+    <servlet-class>controller.HubServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HubServlet</servlet-name>
+    <url-pattern>/HubServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VehicleServlet</display-name>
+    <servlet-name>VehicleServlet</servlet-name>
+    <servlet-class>controller.VehicleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VehicleServlet</servlet-name>
+    <url-pattern>/VehicleServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DriverServlet</display-name>
+    <servlet-name>DriverServlet</servlet-name>
+    <servlet-class>controller.DriverServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DriverServlet</servlet-name>
+    <url-pattern>/DriverServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ScheduleServlet</display-name>
+    <servlet-name>ScheduleServlet</servlet-name>
+    <servlet-class>controller.ScheduleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ScheduleServlet</servlet-name>
+    <url-pattern>/ScheduleServlet</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -5,13 +5,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Consignment;
 import model.Hub;
+import model.Route;
 import model.Trip;
+import model.Vehicle;
 import utils.DBConnection;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.text.DateFormat;  
@@ -19,6 +24,8 @@ import java.text.SimpleDateFormat;
 
 
 import dao.ConsignmentDao;
+import dao.RouteDao;
+import dao.VehicleDao;
 
 
 public class ConsignmentServlet extends HttpServlet {
@@ -33,13 +40,41 @@ public class ConsignmentServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		int selectedRoute = Integer.parseInt(request.getParameter("route"));
+		System.out.println(selectedRoute);
+		DBConnection dbConnection = null;
+        List<Consignment> consignments = null;
+        List<Vehicle> vehicles = null;
+        Route r= null;
+        try {
+            dbConnection = DBConnection.getDbConnnection(); // Get instance of DBConnection
+            ConsignmentDao cDao = new ConsignmentDao(dbConnection);
+            consignments = cDao.getConsignmntsByRouteId(selectedRoute);
+            VehicleDao vDao = new VehicleDao(dbConnection);
+            RouteDao rDao= new RouteDao(dbConnection);
+            r = rDao.findOne(selectedRoute);
+            vehicles = vDao.findAll();
+            System.out.println(vehicles);
+            
+        } catch (ClassNotFoundException | 	SQLException e) {
+            e.printStackTrace();
+        }
+	        // Set the filtered consignments as a request attribute
+        	HttpSession session = request.getSession();
+            session.setAttribute("selectedRoute", selectedRoute);
+            session.setAttribute("selectedRouteName", r.getRouteName());
+        	session.setAttribute("vehicles", vehicles);
+        	session.setAttribute("filteredConsignments", consignments);
+	        // Forward the request to the JSP page
+	        response.sendRedirect("public/consignment-view_3.jsp");
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		String type = request.getParameter("type");
 		switch(type) {
 		
@@ -51,32 +86,22 @@ public class ConsignmentServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println(res);
 			request.setAttribute("res", res);
+			
 		}
-		doGet(request, response);
+		response.sendRedirect("public/consignment-view_3.jsp");
+		
 	}
 	
 	private boolean create(HttpServletRequest request ) throws SQLException, ClassNotFoundException {
 		DBConnection dbConnection;
 		dbConnection = DBConnection.getDbConnnection(); 
-//		this.consignmentId = consignmentId;
-//		this.trip = trip;
-//		this.hub = hub;
-//		this.consignmentDate = consignmentDate;
-//		this.consignmentName = consignmentName;
-//		this.consignmentAddress = consignmentAddress;
-//		this.status = status;
 		Consignment c = new Consignment();
 		c.setTrip(null);
 		int hubId = Integer.parseInt(request.getParameter("hubId"));
 		Hub hub = new Hub();
 		hub.setHubId(hubId);
 		c.setHub(hub);
-		Date date = Calendar.getInstance().getTime();  
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
-		String consignmentDate = dateFormat.format(date);  
-		c.setConsignmentDate(consignmentDate);
 		c.setConsignmentAddress(request.getParameter("consignmentAddress"));
 		ConsignmentDao cDao = new ConsignmentDao(dbConnection);
 		c.setConsignmentName(request.getParameter("consignmentName"));

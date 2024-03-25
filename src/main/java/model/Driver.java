@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Driver {
@@ -11,14 +12,14 @@ public class Driver {
     private long phoneNumber;
     private String emailAddress;
     private String address;
-    private String joiningDate; 
+    private Date joiningDate; 
     private String available;
 	public Driver() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public Driver(int driverId, String name, String gender, int age, String licenceNo, long phoneNumber,
-			String emailAddress, String address, String joiningDate, String available) {
+			String emailAddress, String address, Date joiningDate, String available) {
 		super();
 		this.driverId = driverId;
 		this.name = name;
@@ -79,10 +80,10 @@ public class Driver {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getJoiningDate() {
+	public Date getJoiningDate() {
 		return joiningDate;
 	}
-	public void setJoiningDate(String joiningDate) {
+	public void setJoiningDate(Date joiningDate) {
 		this.joiningDate = joiningDate;
 	}
 	public String getAvailable() {
@@ -117,6 +118,8 @@ public class Driver {
 				&& Objects.equals(licenceNo, other.licenceNo) && Objects.equals(name, other.name)
 				&& phoneNumber == other.phoneNumber;
 	}
-
+	
+	
+	
     
 }

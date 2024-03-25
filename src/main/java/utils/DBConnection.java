@@ -33,12 +33,13 @@ public class DBConnection {
 	}
 
 	public Connection getConnection() throws SQLException {
-		if (connection == null) {
+		if (connection == null ||connection.isClosed()) {
 			connection = DriverManager.getConnection(url, username, password);
 			if (!connection.isClosed()) {
 				System.out.println(connection.isClosed());
 				return connection;
 			}
+			
 		}
 		return connection;
 	}

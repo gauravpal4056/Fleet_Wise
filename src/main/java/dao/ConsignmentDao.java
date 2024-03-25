@@ -1,6 +1,6 @@
 package dao;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +11,7 @@ import model.Consignment;
 import model.Hub;
 import model.Trip;
 import utils.DBConnection;
+import utils.DateHandler;
 
 public class ConsignmentDao implements IDao<Consignment> {
 
@@ -22,11 +23,12 @@ public class ConsignmentDao implements IDao<Consignment> {
 
     @Override
     public Consignment create(Consignment consignment) throws SQLException {
-        Connection connection = null;
+        //Connection connection = null;
         PreparedStatement statement = null;
         ResultSet generatedKeys = null;
+        System.out.println(consignment.toString());
         try {
-            connection = dbConnection.getConnection();
+        	Connection connection = dbConnection.getConnection();
             String query = "INSERT INTO consignments (hub_Id, consignment_Name, consignment_Address, status) VALUES (?, ?, ?, ?)";
             statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setInt(1, consignment.getHub().getHubId());
@@ -39,21 +41,16 @@ public class ConsignmentDao implements IDao<Consignment> {
             }
             generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                consignment.setConsignmentId(generatedKeys.getInt(1));
+            	System.out.println(generatedKeys.getString(1));
+                //consignment.setConsignmentId(generatedKeys.getInt(1));
             } else {
                 throw new SQLException("Creating consignment failed, no ID obtained.");
             }
-        } finally {
-            if (generatedKeys != null) {
-                generatedKeys.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
+        
         return consignment;
     }
 
@@ -63,24 +60,19 @@ public class ConsignmentDao implements IDao<Consignment> {
         PreparedStatement statement = null; 
         try {
             connection = dbConnection.getConnection();
-            String query = "UPDATE consignments SET hub_Id=?, trip_Id=?, consignment_Date=?, consignment_Name=?, consignment_Address=?, status=? WHERE consignment_Id=?";
+            String query = "UPDATE consignments SET hub_Id=?, trip_Id=?, consignment_Name=?, consignment_Address=?, status=? WHERE consignment_Id=?";
             statement = connection.prepareStatement(query);
             statement.setInt(1, consignment.getHub().getHubId());
             statement.setInt(2, consignment.getTrip().getTripId());
-            statement.setString(3, consignment.getConsignmentDate());
-            statement.setString(4, consignment.getConsignmentName());
-            statement.setString(5, consignment.getConsignmentAddress());
-            statement.setString(6, consignment.getStatus());
-            statement.setInt(7, id);
+            statement.setString(3, consignment.getConsignmentName());
+            statement.setString(4, consignment.getConsignmentAddress());
+            statement.setString(5, consignment.getStatus());
+            statement.setInt(6, id);
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
     }
 
@@ -95,13 +87,9 @@ public class ConsignmentDao implements IDao<Consignment> {
             statement.setInt(1, id);
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
     }
 
@@ -120,16 +108,9 @@ public class ConsignmentDao implements IDao<Consignment> {
             if (resultSet.next()) {
                 consignment = extractConsignmentFromResultSet(resultSet);
             }
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
         return consignment;
     }
@@ -149,16 +130,9 @@ public class ConsignmentDao implements IDao<Consignment> {
                 Consignment consignment = extractConsignmentFromResultSet(resultSet);
                 consignments.add(consignment);
             }
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
         return consignments;
     }
@@ -178,16 +152,9 @@ public class ConsignmentDao implements IDao<Consignment> {
                 Consignment consignment = extractConsignmentFromResultSet(resultSet);
                 consignments.add(consignment);
             }
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
         return consignments;
     }
@@ -207,16 +174,9 @@ public class ConsignmentDao implements IDao<Consignment> {
                 Consignment consignment = extractConsignmentFromResultSet(resultSet);
                 consignments.add(consignment);
             }
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
         return consignments;
     }
@@ -236,16 +196,9 @@ public class ConsignmentDao implements IDao<Consignment> {
                 Consignment consignment = extractConsignmentFromResultSet(resultSet);
                 consignments.add(consignment);
             }
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
         }
         return consignments;
     }
@@ -261,8 +214,7 @@ public class ConsignmentDao implements IDao<Consignment> {
         TripDao tripDao = new TripDao(dbConnection);
         Trip trip = tripDao.findOne(resultSet.getInt("trip_Id"));
         consignment.setTrip(trip);
-        Date consignmentDate = resultSet.getDate("consignment_Date");
-        consignment.setConsignmentDate(consignmentDate.toString());
+        consignment.setConsignmentDate(DateHandler.sqlTimeToJava(resultSet.getTimestamp("consignment_Date")));
         consignment.setConsignmentName(resultSet.getString("consignment_Name"));
         consignment.setConsignmentAddress(resultSet.getString("consignment_Address"));
         consignment.setStatus(resultSet.getString("status"));

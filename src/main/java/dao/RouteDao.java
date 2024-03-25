@@ -2,7 +2,6 @@
 package dao;
 
 import model.Route;
-import model.Hub;
 import utils.DBConnection;
 
 import java.sql.Connection;
@@ -11,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class RouteDao implements IDao<Route> {
 
@@ -25,7 +23,6 @@ public class RouteDao implements IDao<Route> {
     public Route create(Route route) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet generatedKeys = null;
         try {
             connection = dbConnection.getConnection();
             String query = "INSERT INTO routes (route_Name, start_Point, destination_Point) VALUES (?, ?, ?)";
@@ -37,12 +34,7 @@ public class RouteDao implements IDao<Route> {
             if (affectedRows == 0) {
                 throw new SQLException("Creating route failed, no rows affected.");
             }
-            generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                route.setRouteId(generatedKeys.getInt(1));
-            } else {
-                throw new SQLException("Creating route failed, no ID obtained.");
-            }
+            
         } catch (SQLException e) {
             e.printStackTrace(); 
             throw e;

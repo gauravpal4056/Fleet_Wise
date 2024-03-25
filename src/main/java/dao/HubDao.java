@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.Hub;
 import model.Route;
 import utils.DBConnection;
@@ -20,7 +19,7 @@ public class HubDao implements IDao<Hub> {
     }
 
     // SQL queries
-    private static final String CREATE_QUERY = "INSERT INTO hubs (hub_Id, hub_Name, address, city, pincode, contact_Number, email_Address) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String CREATE_QUERY = "INSERT INTO hubs (route_id, hub_Name, address, city, pincode, contact_Number, email_Address) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_QUERY = "UPDATE hubs SET route_Id=?, hub_Name=?, address=?, city=?, pincode=?, contact_Number=?, email_Address=? WHERE hub_Id = ?";
     private static final String DELETE_QUERY = "DELETE FROM hubs WHERE hub_Id = ?";
     private static final String FIND_ONE_QUERY = "SELECT * FROM hubs WHERE hub_Id = ?";
@@ -29,22 +28,21 @@ public class HubDao implements IDao<Hub> {
 
     @Override
     public Hub create(Hub hub) throws SQLException {
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(CREATE_QUERY)) {
-            stmt.setInt(1, hub.getHubId());
-            //stmt.setInt(2, hub.getRoute().getRouteId());
-            stmt.setString(3, hub.getHubName());
-            stmt.setString(4, hub.getAddress());
-            stmt.setString(5, hub.getCity());
-            stmt.setInt(6, hub.getPincode());
-            stmt.setLong(7, hub.getContactNumber());
-            stmt.setString(8, hub.getEmailAddress());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace(); 
-            throw e;
-        }
-        return hub;
+    	try (Connection conn = dbConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(CREATE_QUERY)) {
+               stmt.setInt(1, hub.getRoute().getRouteId());
+               stmt.setString(2, hub.getHubName());
+               stmt.setString(3, hub.getAddress());
+               stmt.setString(4, hub.getCity());
+               stmt.setInt(5, hub.getPincode());
+               stmt.setLong(6, hub.getContactNumber());
+               stmt.setString(7, hub.getEmailAddress());
+               stmt.executeUpdate();
+           } catch (SQLException e) {
+               e.printStackTrace();
+               throw e;
+           }
+           return hub;
     }
 
     @Override
@@ -87,20 +85,40 @@ public class HubDao implements IDao<Hub> {
 
     @Override
     public Hub findOne(int id) throws SQLException {
+    	Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         Hub hub = null;
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(FIND_ONE_QUERY)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    hub = extractHubFromResultSet(rs);
-                }
+        try {
+            connection = dbConnection.getConnection();
+            statement = connection.prepareStatement(FIND_ONE_QUERY);
+            statement.setInt(1, id);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                hub = extractHubFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace(); 
             throw e;
         }
         return hub;
+    	
+    	
+    	
+//        Hub hub = null;
+//        try (Connection conn = dbConnection.getConnection();
+//             PreparedStatement stmt = conn.prepareStatement(FIND_ONE_QUERY)) {
+//            stmt.setInt(1, id);
+//            try (ResultSet rs = stmt.executeQuery()) {
+//                if (rs.next()) {
+//                    hub = extractHubFromResultSet(rs);
+//                }
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace(); 
+//            throw e;
+//        }
+//        return hub;
     }
 
     @Override
@@ -110,7 +128,6 @@ public class HubDao implements IDao<Hub> {
              PreparedStatement stmt = conn.prepareStatement(FIND_ALL_QUERY);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-            	System.out.println("rs.next_hit");
                 Hub hub = extractHubFromResultSet(rs);
                 hubs.add(hub);
             }
