@@ -2,6 +2,8 @@
 <%
 	if(session.getAttribute("user") == null){
 		response.sendRedirect("login.jsp");	}
+	else
+		response.sendRedirect("index.jsp");
 %>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

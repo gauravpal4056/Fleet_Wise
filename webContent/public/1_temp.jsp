@@ -181,7 +181,7 @@
                         </span>
                     <span style="font-weight: bold">Admin</span>
                 </a>
-                <div id="collapseUtilities3" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities3" class="collapse"   aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="admin-add.jsp">Add Admin</a>

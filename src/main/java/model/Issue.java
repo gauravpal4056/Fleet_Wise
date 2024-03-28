@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public class Issue {
 	private int issueId;
-    private Driver driverId;
+    private Driver driver;
 
     //many to one
-	private Vehicle vehicleId;
-    private Consignment consignmentId;
+	private Vehicle vehicle;
+    private Consignment consignment;
     private String description;
     private String raisedOn;
     private String resolvedOn;
@@ -18,18 +18,24 @@ public class Issue {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Issue(int issueId, Vehicle vehicleId, Consignment consignmentId, Driver driverId, String description,
+	public Issue(int issueId, Driver driver, Vehicle vehicle, Consignment consignment, String description,
 			String raisedOn, String resolvedOn, String remarks, String status) {
 		super();
 		this.issueId = issueId;
-		this.vehicleId = vehicleId;
-		this.consignmentId = consignmentId;
-		this.driverId = driverId;
+		this.driver = driver;
+		this.vehicle = vehicle;
+		this.consignment = consignment;
 		this.description = description;
 		this.raisedOn = raisedOn;
 		this.resolvedOn = resolvedOn;
 		this.remarks = remarks;
 		this.status = status;
+	}
+	@Override
+	public String toString() {
+		return "Issue [issueId=" + issueId + ", driver=" + driver + ", vehicle=" + vehicle + ", consignment="
+				+ consignment + ", description=" + description + ", raisedOn=" + raisedOn + ", resolvedOn=" + resolvedOn
+				+ ", remarks=" + remarks + ", status=" + status + "]";
 	}
 	public int getIssueId() {
 		return issueId;
@@ -37,23 +43,23 @@ public class Issue {
 	public void setIssueId(int issueId) {
 		this.issueId = issueId;
 	}
-	public Vehicle getVehicleId() {
-		return vehicleId;
+	public Driver getDriver() {
+		return driver;
 	}
-	public void setVehicleId(Vehicle vehicleId) {
-		this.vehicleId = vehicleId;
+	public void setDriver(Driver driver) {
+		this.driver = driver;
 	}
-	public Consignment getConsignmentId() {
-		return consignmentId;
+	public Vehicle getVehicle() {
+		return vehicle;
 	}
-	public void setConsignmentId(Consignment consignmentId) {
-		this.consignmentId = consignmentId;
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
-	public Driver getDriverId() {
-		return driverId;
+	public Consignment getConsignment() {
+		return consignment;
 	}
-	public void setDriverId(Driver driverId) {
-		this.driverId = driverId;
+	public void setConsignment(Consignment consignment) {
+		this.consignment = consignment;
 	}
 	public String getDescription() {
 		return description;
@@ -86,15 +92,8 @@ public class Issue {
 		this.status = status;
 	}
 	@Override
-	public String toString() {
-		return "Issue [issueId=" + issueId + ", vehicleId=" + vehicleId + ", consignmentId=" + consignmentId
-				+ ", driverId=" + driverId + ", description=" + description + ", raisedOn=" + raisedOn + ", resolvedOn="
-				+ resolvedOn + ", remarks=" + remarks + ", status=" + status + "]";
-	}
-	@Override
 	public int hashCode() {
-		return Objects.hash(consignmentId, description, driverId, issueId, raisedOn, remarks, resolvedOn, status,
-				vehicleId);
+		return Objects.hash(consignment, description, driver, issueId, raisedOn, remarks, resolvedOn, status, vehicle);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -105,12 +104,15 @@ public class Issue {
 		if (getClass() != obj.getClass())
 			return false;
 		Issue other = (Issue) obj;
-		return Objects.equals(consignmentId, other.consignmentId) && Objects.equals(description, other.description)
-				&& Objects.equals(driverId, other.driverId) && issueId == other.issueId
+		return Objects.equals(consignment, other.consignment) && Objects.equals(description, other.description)
+				&& Objects.equals(driver, other.driver) && issueId == other.issueId
 				&& Objects.equals(raisedOn, other.raisedOn) && Objects.equals(remarks, other.remarks)
 				&& Objects.equals(resolvedOn, other.resolvedOn) && Objects.equals(status, other.status)
-				&& Objects.equals(vehicleId, other.vehicleId);
+				&& Objects.equals(vehicle, other.vehicle);
 	}
+	
+	
+	
     
     
 }

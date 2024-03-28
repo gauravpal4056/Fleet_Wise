@@ -79,4 +79,24 @@
     <servlet-name>ScheduleServlet</servlet-name>
     <url-pattern>/ScheduleServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DriverDashboardServlet</display-name>
+    <servlet-name>DriverDashboardServlet</servlet-name>
+    <servlet-class>controller.DriverDashboardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DriverDashboardServlet</servlet-name>
+    <url-pattern>/DriverDashboardServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>TripServlet</display-name>
+    <servlet-name>TripServlet</servlet-name>
+    <servlet-class>controller.TripServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TripServlet</servlet-name>
+    <url-pattern>/TripServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -75,6 +75,22 @@ public class ConsignmentDao implements IDao<Consignment> {
             throw e;
         }
     }
+    
+    public boolean updateStatusByTripId(int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null; 
+        try {
+            connection = dbConnection.getConnection();
+            String query = "UPDATE consignments SET status=? WHERE trip_Id=?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            int affectedRows = statement.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
+        }
+    }
 
     @Override
     public boolean delete(int id) throws SQLException {
@@ -204,6 +220,31 @@ public class ConsignmentDao implements IDao<Consignment> {
     }
     
 
+    public List<Consignment> getConsignmentsByDriverId(int driverid) {
+    		Consignment consignment = new Consignment();
+
+    		List<Consignment> consignments = new ArrayList<>();
+
+    		try {
+    			Connection connection = dbConnection.getConnection();
+    			PreparedStatement statement = connection.prepareStatement(
+    					"select consignment_id from consignments where hub_id = (select hub_id from hubs where route_id = (select route_id from trips where vehicle_id = (select vehicle_id from vehicles where driver_id = ?) ))");
+    			statement.setInt(1, driverid);
+    			ResultSet resultset = statement.executeQuery();
+
+    			while (resultset.next()) {
+    				
+    				consignments.add(findOne(resultset.getInt("consignment_id")));
+
+    			}
+
+    		} catch (Exception e) {
+    			System.out.println(e);
+    		}
+
+    		return consignments;
+
+    	}
 
     private Consignment extractConsignmentFromResultSet(ResultSet resultSet) throws SQLException {
         Consignment consignment = new Consignment();

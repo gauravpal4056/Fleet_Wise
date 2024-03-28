@@ -34,8 +34,6 @@ public class AdminService {
 	    	}
 	    	
 	    	return res;
-	    	
-
 	//		CallableStatement cstmt = connection.prepareCall("{ ? = call TRIP_R_V( ? ) }");
 	//
 	//		cstmt.registerOutParameter(1, Types.NUMERIC);
@@ -45,8 +43,6 @@ public class AdminService {
 	//		cstmt.execute();
 	//
 	//		int routId = cstmt.getInt(1);
-	    	
-	
 	    }
 	    
 	    public boolean scheduleOneConsignment(int vehicleid, int consignmentid, int routId) throws SQLException {
@@ -148,8 +144,6 @@ public class AdminService {
 	            pstmt_upt2.setInt(2, vehicleid);
 	            int rowno = pstmt_upt2.executeUpdate();
 	            if (rowno > 0) {
-	            	
-	            	
 	                System.out.println("vehicle  STATUS ");
 	            } else {
 	            	res = false;

@@ -177,6 +177,31 @@ public class HubDao implements IDao<Hub> {
         return updated;
     }
     
+    public List<Hub>  gethubsfromdriverid(int driverid) throws SQLException {
+		List<Hub> hubs = new ArrayList<>();
+		
+		try {
+			Connection connection = dbConnection.getConnection();
+
+			PreparedStatement statement = connection.prepareStatement(
+					"select hub_id from hubs where route_id = (select route_id from trips where vehicle_id = (select vehicle_id from vehicles where driver_id = ?) )");
+			statement.setInt(1, driverid);
+
+			ResultSet resultset = statement.executeQuery();
+
+			while (resultset.next()) {
+				hubs.add(findOne(resultset.getInt("hub_id")));
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			
+
+		}
+		return hubs;
+    	
+    }
+    
     private Hub extractHubFromResultSet(ResultSet rs) throws SQLException {
         Hub hub = new Hub();
         hub.setHubId(rs.getInt("hub_Id"));

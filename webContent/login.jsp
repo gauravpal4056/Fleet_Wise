@@ -1,10 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+<%
+	if(session.getAttribute("user")!=null && session.getAttribute("user").equals("driver") ){
+		response.sendRedirect("public/indexDriver.jsp");	}
+	else if(session.getAttribute("user")!=null && session.getAttribute("user").equals("admin")){
+		response.sendRedirect("DriverDashboardServlet");
+	}
+%>
 <!DOCTYPE html>
 <html>
 	<head>
 	<meta charset="ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Login</title>
 	<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 	
@@ -48,9 +56,7 @@
 	    
 	    
 	    
-	    
-	    
-	    
+
 	    <script>
 	      function selectAdmin() {
 	        document.getElementById('admin').style.cssText = 'border: 4px solid rgb(209 213 219) '

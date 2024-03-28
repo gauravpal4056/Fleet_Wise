@@ -161,9 +161,7 @@ public class VehicleDao implements IDao<Vehicle> {
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating vehicle failed, no rows affected.");
-                
             }
-            
         }
         return vehicle;
     }
@@ -251,6 +249,22 @@ public class VehicleDao implements IDao<Vehicle> {
             }
         }
         return vehicles;
+    }
+    public Vehicle findByDriverId(int driverId) throws SQLException {
+    	Vehicle vehicle = null;
+        String query = "SELECT * FROM Vehicles WHERE Driver_ID = ?";
+        Connection connection=dbConnection.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, driverId);
+            
+            try (ResultSet resultSet = statement.executeQuery()) {
+            	if (resultSet.next()) {
+                    return mapResultSetToVehicle(resultSet);
+                }
+            }
+         }
+        
+        return vehicle;
     }
 
     private Vehicle mapResultSetToVehicle(ResultSet resultSet) throws SQLException {

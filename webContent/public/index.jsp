@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    
+
+<%
+	if(session.getAttribute("user") == null){
+		response.sendRedirect("login.jsp");	}
+
+%>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
@@ -418,7 +423,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn bg-gradient-danger text-gray-100" href="login.html">Logout</a>
+                    <a class="btn bg-gradient-danger text-gray-100" href="logout.jsp">Logout</a>
                 </div>
             </div>
         </div>

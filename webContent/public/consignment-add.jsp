@@ -18,6 +18,10 @@
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
     String formattedDate = now.format(formatter);
 %>
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
+%>
 <!DOCTYPE html>
 <html>
 <head>

@@ -390,17 +390,20 @@
                                 </button></a>
                     <!-- Content Row -->
 					<div class="row ">
-						
-                        <div class="col-lg-6">
-                        	<% 
-			                	List<Route> rs = (List<Route>) session.getAttribute("routes"); // Assuming there's a method findAllRoutes() in your DAO
+					
+					
+					<% 
+			                	List<Route> rs = (List<Route>) session.getAttribute("routes"); 
+                        		int counter = 1;
 			                	if (rs != null && rs.size()!=0){
 				                for (Route r: rs) {
 				             %>
+				
+                        	
 				             	<div class="card shadow mb-4">
                                 <!-- Card Header - Accordion -->
 	                                <a href="#collapseCardExample" class="d-block bg-primary  card-header py-3" data-toggle="collapse"
-	                                    role="button" aria-expanded="true" aria-controls="collapseCardExample">
+	                                    role="button" aria-expanded="true" aria-controls="collapseCardExample<%=counter %>">
 	
 	                                    <h6 class="m-0 font-weight-bold text-gray-200"><%=r.getRouteName() %></h6>
 	                                </a>

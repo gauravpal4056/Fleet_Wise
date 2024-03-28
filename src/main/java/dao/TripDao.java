@@ -135,6 +135,40 @@ public class TripDao implements IDao<Trip> {
         }
         return trips;
     }
+    
+    public Trip getTripByDriverId(int driverId) throws SQLException {
+        Connection connection = null;
+        connection = dbConnection.getConnection();
+        Trip trip = null;
+        String sql = "SELECT * FROM Trips WHERE Driver_ID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        	
+            statement.setInt(1, driverId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    trip = extractTripFromResultSet(resultSet);
+                }
+            }
+        }
+        return trip;
+    }
+    
+    public Trip gettripidfromdriverid(int driverid) throws SQLException {
+		Trip trip = new Trip();
+
+		Connection connection = dbConnection.getConnection();
+		String query = " select trip_id from trips where vehicle_id = (select vehicle_id from vehicles where driver_id = ? ) ";
+
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setInt(1, driverid);
+		ResultSet resultset = statement.executeQuery();
+		while (resultset.next()) {
+			int tripid = resultset.getInt("trip_id");
+			trip = findOne(tripid);
+		}
+
+		return trip;
+	}
 
     private Trip extractTripFromResultSet(ResultSet resultSet) throws SQLException {
         Trip trip = new Trip();
@@ -148,7 +182,6 @@ public class TripDao implements IDao<Trip> {
         trip.setTripStartTime(resultSet.getString("trip_Start_Time"));
         trip.setTripEndTime(resultSet.getString("trip_End_Time"));
         trip.setRemarks(resultSet.getString("remarks"));
-        ConsignmentDao consignmentDao = new ConsignmentDao(dbConnection);
         //List<Consignment> consignments = consignmentDao.getConsignmentsByTripId(resultSet.getInt("trip_Id"));
         trip.setConsignments(null);
         return trip;

@@ -101,7 +101,7 @@ public class DriverDao implements IDao<Driver> {
 	@Override
 	public Driver findOne(int id) throws SQLException {
 		Connection connection=dbConnection.getConnection();
-		final String sqlQuery="select name,gender,age,Licence_NO,Phone_Number,Email_Address,Address,Joining_Date from drivers where driverId=?";
+		final String sqlQuery="select * from drivers where driver_Id=?";
 		PreparedStatement preparedStatement=connection.prepareStatement(sqlQuery); 
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet=preparedStatement.executeQuery();
@@ -113,10 +113,10 @@ public class DriverDao implements IDao<Driver> {
 		return driver;
 	}
 	
-	public Driver findBydrivernameAndPassword(String drivername) throws SQLException {
-		PreparedStatement ps = dbConnection.getConnection().prepareStatement("select * from drivers where name=?" );
+	public Driver findByNamePassword(String drivername, String licence) throws SQLException {
+		PreparedStatement ps = dbConnection.getConnection().prepareStatement("select * from drivers where name=? AND Licence_NO= ? " );
         ps.setString(1, drivername);
-
+        ps.setString(2, licence);
         ResultSet resultSet = ps.executeQuery();
         Driver driver = null;
         if (resultSet.next()) {
