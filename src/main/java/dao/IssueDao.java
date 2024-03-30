@@ -3,6 +3,7 @@ package dao;
 import model.Driver;
 import model.Issue;
 import utils.DBConnection;
+import utils.DateHandler;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class IssueDao implements IDao<Issue> {
             statement.setInt(2, issue.getVehicle().getVehicleId());
             statement.setInt(3, issue.getConsignment().getConsignmentId());
             statement.setString(4, issue.getDescription());
-            statement.setTimestamp(5, Timestamp.valueOf(issue.getRaisedOn()));
-            statement.setTimestamp(6, issue.getResolvedOn() != null ? Timestamp.valueOf(issue.getResolvedOn()) : null);
+            statement.setTimestamp(5, DateHandler.javaToSqlTime(issue.getRaisedOn()));
+            statement.setTimestamp(6, DateHandler.javaToSqlTime(issue.getResolvedOn()));
             statement.setString(7, issue.getRemarks());
             statement.setString(8, issue.getStatus());
             
@@ -64,8 +65,8 @@ public class IssueDao implements IDao<Issue> {
             statement.setInt(2, issue.getVehicle().getVehicleId());
             statement.setInt(3, issue.getConsignment().getConsignmentId());
             statement.setString(4, issue.getDescription());
-            statement.setTimestamp(5, Timestamp.valueOf(issue.getRaisedOn()));
-            statement.setTimestamp(6, issue.getResolvedOn() != null ? Timestamp.valueOf(issue.getResolvedOn()) : null);
+            statement.setTimestamp(5, DateHandler.javaToSqlTime(issue.getRaisedOn()));
+            statement.setTimestamp(6, DateHandler.javaToSqlTime(issue.getResolvedOn()));
             statement.setString(7, issue.getRemarks());
             statement.setString(8, issue.getStatus());
             statement.setInt(9, id);
@@ -123,15 +124,17 @@ public class IssueDao implements IDao<Issue> {
     // Helper method to map ResultSet to Issue object
     private Issue mapResultSetToIssue(ResultSet resultSet) throws SQLException {
         Issue issue = new Issue();
+        DriverDao driverDao = new DriverDao(dbConnection);
+        VehicleDao vehicleDao = new VehicleDao(dbConnection);
+        ConsignmentDao consignmentDao = new ConsignmentDao(dbConnection);
         issue.setIssueId(resultSet.getInt("Issue_ID"));
         // Assuming you have appropriate DAOs to fetch related entities (Driver, Vehicle, Consignment)
         issue.setDriver(driverDao.findOne(resultSet.getInt("Driver_ID")));
         issue.setVehicle(vehicleDao.findOne(resultSet.getInt("Vehicle_ID")));
         issue.setConsignment(consignmentDao .findOne(resultSet.getInt("Consignment_ID")));
         issue.setDescription(resultSet.getString("Description"));
-        issue.setRaisedOn(resultSet.getTimestamp("Raised_On").toLocalDateTime());
-        Timestamp resolvedOnTimestamp = resultSet.getTimestamp("Resolved_On");
-        issue.setResolvedOn(resolvedOnTimestamp != null ? resolvedOnTimestamp.toLocalDateTime() : null);
+        issue.setRaisedOn(DateHandler.sqlTimeToJava(resultSet.getTimestamp("Raised_On")));
+        issue.setResolvedOn(DateHandler.sqlTimeToJava(resultSet.getTimestamp("Resolved_On")));
         issue.setRemarks(resultSet.getString("Remarks"));
         issue.setStatus(resultSet.getString("Status"));
         return issue;

@@ -119,11 +119,20 @@
                     <span class="material-symbols-outlined">
                        route
                         </span>
-                    <span>Trip</span>
+                    <span>Active Trip</span>
                 </a>
                 
             </li>
-
+			<li class="nav-item">
+                <a class="nav-link collapsed" href="TripFetchServlet" 
+                   >
+                    <span class="material-symbols-outlined">
+                       route
+                        </span>
+                    <span>All Trips</span>
+                </a>
+                
+            </li>
 
             
 
@@ -252,16 +261,16 @@
 
                     <!-- Page Heading -->
 
-                    <div class="text-center">
-                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 14rem;" src="img/driver.jpg" alt="...">
+                    <div class="text-center" style="background: url('https://as2.ftcdn.net/v2/jpg/01/38/84/09/1000_F_138840925_zhROJibslqOMFjpqxR0BCpDF6n5AiZmY.jpg';)"/>
+                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 100%; height:200px;" src=https://img.freepik.com/free-vector/hand-drawn-transportation-truck-with-delivery-man_23-2149161306.jpg?t=st=1711705190~exp=1711708790~hmac=1df90ba975ad656104cbabc8db6e9638844fc2e75b6e30fac036a2c0ebe6363f&w=996 alt="...">
                      </div>
 						<h4 style="font-weight: 600; margin-bottom: 30px;" class="font-bold">Today's Agenda</h4>
 
                     <!-- Content Row -->
 
                     
-                    <div class="row">
-                     	<div class="card" style="width: 16rem;">
+                    <div class="row" style="height:100%; gap:20px;">
+                     	<div class="card" style="width: 16rem; padding:10px;">
                      	<h5 class="card-title">My Profile</h5>
 						  <img style="height:150px;"  src="https://cdn.dribbble.com/users/1176657/screenshots/15468294/media/34af996ddff444391edab94abcf3c7f3.png" class="card-img-top" alt="...">
 						  <div class="card-body">
@@ -277,47 +286,39 @@
                               <%} %>
 						  </div>
 						</div>
-						<div class="card" style="width: 16rem;">
+						<div class="card" style="width: 16rem;padding:10px;">
 							<h5 class="card-title">My Vehicle</h5>
-						  <img style="height:200px;" src="img/vehicle.jpg" class="card-img-top" alt="...">
+						  <img style="height:150px;" src="https://www.reshot.com/preview-assets/illustrations/RWHQGS4X96/truck-delivery-service-RWHQGS4X96-w600.jpg" class="card-img-top" alt="...">
 
 						  <div class="card-body">
-						    <%Vehicle v = (Vehicle) request.getAttribute("vehicle"); 
+						    <%Vehicle v = (Vehicle) session.getAttribute("vehicle"); 
                             	if(v!=null)	{
                             %>
-                              <h5 style="font-weight: bolder;" class="t-t">Hii <%= v.getModel()%></h5>
-                              <h6 class="text-body">Phone: <%=d.getPhoneNumber() %></h6>
-                              <h6 class="text-body">E-mail: <%= d.getEmailAddress()%></h6 >
-                              <h6 class="text-body">Status: <%= d.getAvailable()%></h6>
+                              <h5 style="font-weight: bolder;" class="t-t"><%= v.getModel()%></h5>
+                              <h6 class="text-body">Fuel: <%=v.getFuelType() %></h6>
+                              <h6 class="text-body">Reg: <%= v.getRegistrationNo()%></h6 >
+                              <h6 class="text-body">Status: <%= v.getStatus()%></h6>
                               <%} else{%>  
                               <h1>error occured refresh!</h1>
                               <%} %>
 					
 						  </div>
 						</div>
-						<div class="card" style="width: 18rem;">
-							<h5 class="card-title">My Profile</h5>
-						  	<img style="height:200px;" src="img/vehicle.jpg" class="card-img-top" alt="...">						  <div class="card-body">
-						    <h5 class="card-title">Card title</h5>
-						    <p class="card-text">lk of the card's content.</p>
-						    <a href="#" class="btn btn-primary">Go somewhere</a>
+						<%Trip trip = (Trip)request.getAttribute("trip"); 
+							if(trip!=null){
+						%>
+						<div class="card" style="width: 18rem;padding:10px;">
+							<h5 class="card-title">Trip Assigned</h5>
+						  	<img style="height:150px;" src="https://img.freepik.com/premium-photo/free-shipping-concept-illustration_839035-551019.jpg?w=996" class="card-img-top" alt="...">						  <div class="card-body">
+						    <h5 style="font-weight: bolder;" class="card-title">Trip id : <%=trip.getTripId() %> </h5>
+   						    <h6>Route : <%=trip.getRoute().getRouteName() %> </h6>
+   						    <h6>Vehicle id : <%=v.getModel() %> </h6>
+   					        <h6>Started on : <%=trip.getTripStartTime() %> </h6>
+						    <a href="driver-trip.jsp" class="btn btn-primary">Start Trip</a>
 						  </div>
 						</div>
-						<div class="card" style="width: 18rem;">
-							<h5 class="card-title">My Profile</h5>
-						  	<img style="height:200px;" src="img/vehicle.jpg" class="card-img-top" alt="...">						  
-						  	<div class="card-body">
-						    <h5 class="card-title">Card title</h5>
-						    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-							<p  class="dbb text-body" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                              aria-expanded="false">Hubs Connected  <i class="fa fa-caret-down" aria-hidden="true"></i></p>
-                              <div class="dropdown-menu border" aria-labelledby="dropdownMenuButton">
-                                  <a class="dropdown-item" href="#">Hub 1</a>
-                                  <a class="dropdown-item" href="#">hub2</a>
-                                  <a class="dropdown-item" href="#">Hub3</a>
-                              </div>
-						  </div>						  
-						  </div>
+						<%} %>
+						
 						</div>
                     </div>
             </div>

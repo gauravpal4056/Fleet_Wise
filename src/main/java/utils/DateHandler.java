@@ -18,14 +18,18 @@ public class DateHandler {
 	}
 	
 	public static java.util.Date sqlTimeToJava(Timestamp timestamp) {
+		if(timestamp == null )return null;
         return new Date(timestamp.getTime());
 	}
 	
 	public static Timestamp javaToSqlTime(java.util.Date utilDate) {
+		if(utilDate == null )return null;
+
         return new Timestamp(utilDate.getTime());
     }
 	
 	public static String javaToStr(java.util.Date utilDate) {
+		if(utilDate == null )return "";
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy h:mm a");
         return formatter.format(utilDate);
     }

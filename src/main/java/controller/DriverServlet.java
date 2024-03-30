@@ -1,5 +1,6 @@
 package controller;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,6 +11,7 @@ import utils.DBConnection;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.List;
 
 import dao.DriverDao;
 
@@ -32,7 +34,30 @@ public class DriverServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		try {
+            // Get driver data from the database
+        	Class.forName("oracle.jdbc.driver.OracleDriver");
+            DBConnection dbConnection = DBConnection.getDbConnnection();
+            DriverDao driverDao = new DriverDao(dbConnection);
+            List<Driver> drivers = driverDao.findAll();
+            
+            System.out.println(drivers);
+            
+//            // Set the driver list as an attribute in the request object
+//            request.setAttribute("Drivers", drivers);
+//            
+//            // Forward the request to the JSP page for displaying the list
+//            request.getRequestDispatcher("/Driver/Driver_list.jsp").forward(request, response);
+            
+            request.setAttribute("drivers", drivers);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/driver-view.jsp");
+            dispatcher.forward(request, response);
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions
+        }
 	}
 
 	/**
@@ -63,16 +88,15 @@ public class DriverServlet extends HttpServlet {
         d.setPhoneNumber(driverPhone);
         d.setLicenceNo(licenceNumber);
         d.setEmailAddress(driverEmail);
-        System.out.println(d);
         Driver res = dDao.create(d);
         
 //        if(res!=null)
 //        	response.sendRedirect("public/driver-view.jsp"); 
 //        response.sendRedirect("public/404.jsp");
         if (res != null && !response.isCommitted()) 
-        	response.sendRedirect("public/driver-view.jsp"); 
+        	response.sendRedirect("driver-view.jsp"); 
        else {
-            response.sendRedirect("public/404.jsp");
+            response.sendRedirect("404.jsp");
         }
 
 	}

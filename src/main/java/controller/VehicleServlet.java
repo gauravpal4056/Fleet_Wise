@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import dao.VehicleDao;
 
@@ -37,9 +38,23 @@ public class VehicleServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+        DBConnection dbConnection;
+		try {
+			dbConnection = DBConnection.getDbConnnection();
+			List<Vehicle> vehicles = null;
 
+			VehicleDao vDao = new VehicleDao(dbConnection);
+	    	vehicles = vDao.findAll();
+            request.setAttribute("vehicles", vehicles);
+			request.getRequestDispatcher("vehicle-view.jsp").forward(request,  response);
+
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // Get instance of DBConnection
+
+        
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -54,7 +69,7 @@ public class VehicleServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		int driverId = Integer.parseInt(request.getParameter("driver"));
-		String regno = request.getParameter("registrationNumber");
+		String regno = request.getParameter("registrationNumber").toUpperCase();
 		String model = request.getParameter("model");
 		String 	fuelType = request.getParameter("fuelType").toUpperCase();
 		String lastmaintained = request.getParameter("lastMaintenanceDate") ;
@@ -85,12 +100,12 @@ public class VehicleServlet extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-	        response.sendRedirect("public/404.jsp");
+	        response.sendRedirect("404.jsp");
 
 		}
                 
         if (res != null && !response.isCommitted()) 
-            response.sendRedirect("public/vehicle-view.jsp");
+            response.sendRedirect("vehicle-view.jsp");
 //       else {
 //            response.sendRedirect("public/404.jsp");
 //        }

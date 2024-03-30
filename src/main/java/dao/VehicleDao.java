@@ -188,7 +188,7 @@ public class VehicleDao implements IDao<Vehicle> {
     }
     
     public boolean setVehicleStatus(String status, int id) throws SQLException {
-    	String query = "UPDATE vehicles SET available=? WHERE vehicle_id=?";
+    	String query = "UPDATE vehicles SET status=? WHERE vehicle_id=?";
     	try (Connection connection=dbConnection.getConnection();
     			PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(2, id);
@@ -265,6 +265,24 @@ public class VehicleDao implements IDao<Vehicle> {
          }
         
         return vehicle;
+    }
+    
+    public boolean updateStatus(int vehicleid) throws SQLException {
+        Connection connection=dbConnection.getConnection();
+        boolean res = true;
+    	String upd_qry3 = " update vehicles set STATUS = ? where vehicle_id = ?  ";
+        PreparedStatement pstmt_upt2 = connection.prepareStatement(upd_qry3);
+        pstmt_upt2.setString(1,"ACTIVE" );
+        pstmt_upt2.setInt(2, vehicleid);
+        int rowno = pstmt_upt2.executeUpdate();
+        if (rowno > 0) {
+            System.out.println("vehicle  STATUS ");
+            return res;
+        } else {
+        	res = false;
+            System.out.println("Failed  CHANGE the vehicle status");
+        }
+        return res;
     }
 
     private Vehicle mapResultSetToVehicle(ResultSet resultSet) throws SQLException {

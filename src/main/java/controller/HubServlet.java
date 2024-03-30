@@ -62,7 +62,6 @@ public class HubServlet extends HttpServlet {
 	            // Driver entry created successfully
 	            // Forward the request to the JSP page to display success message or perform further actions
 	            request.setAttribute("createdRoute", createHub);
-	            System.out.println("Data Inserted Successfully.");
 	//            RequestDispatcher dispatcher = request.getRequestDispatcher("/Driver/Add_driver.jsp");
 	//            dispatcher.forward(request, response);
 	        } else {
@@ -73,7 +72,7 @@ public class HubServlet extends HttpServlet {
 		        e.printStackTrace();
 		    }
 		    
-			response.sendRedirect("public/hub-view.jsp");
+			response.sendRedirect("hub-view.jsp");
 
 		}
 	

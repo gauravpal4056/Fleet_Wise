@@ -99,4 +99,44 @@
     <servlet-name>TripServlet</servlet-name>
     <url-pattern>/TripServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>TripFetchServlet</display-name>
+    <servlet-name>TripFetchServlet</servlet-name>
+    <servlet-class>controller.TripFetchServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TripFetchServlet</servlet-name>
+    <url-pattern>/TripFetchServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UpdateDriverServlet</display-name>
+    <servlet-name>UpdateDriverServlet</servlet-name>
+    <servlet-class>controller.UpdateDriverServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateDriverServlet</servlet-name>
+    <url-pattern>/UpdateDriverServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UpdateRouteServlet</display-name>
+    <servlet-name>UpdateRouteServlet</servlet-name>
+    <servlet-class>controller.UpdateRouteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateRouteServlet</servlet-name>
+    <url-pattern>/UpdateRouteServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RouteViewServlet</display-name>
+    <servlet-name>RouteViewServlet</servlet-name>
+    <servlet-class>controller.RouteViewServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RouteViewServlet</servlet-name>
+    <url-pattern>/RouteViewServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

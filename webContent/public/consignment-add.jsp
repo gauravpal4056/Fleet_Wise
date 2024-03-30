@@ -315,7 +315,7 @@
                                 <div class="body-form vehicle-form">
                       				<h4 style="margin-bottom:20px;" class="m-9 font-weight-bold ">create consignment</h4	>
                                     <!-- Consignments Form -->
-                                    <form method="post" action="../ConsignmentServlet" id="consignmentsForm">
+                                    <form method="post" action="ConsignmentServlet" id="consignmentsForm">
 										<input class="d-none" style="display: hidden" name="type" value="create" />
                                         <div class="form-flex">
                                             <div class="form-group">

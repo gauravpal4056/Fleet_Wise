@@ -34,7 +34,6 @@ public class LoginServlet extends HttpServlet {
         String idType = request.getParameter("type").toUpperCase();
         HttpSession session = request.getSession();
         System.out.println(idType);
-        System.out.println(idType.equals("ADMIN"));
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
 	    	DBConnection dbConnection ;
@@ -45,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 	    		if (res!=null) {
 	            	session.setAttribute("user", idType);
 	            	session.setAttribute("userId", res.getAdminId());
-	                response.sendRedirect("public/index.jsp");
+	                response.sendRedirect("index.jsp");
 	            } else {
 	            	System.out.println("NO ADMINN FOUND");
 	            	request.setAttribute("message", "No Admin Found !");

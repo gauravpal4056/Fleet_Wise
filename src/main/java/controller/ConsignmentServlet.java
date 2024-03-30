@@ -40,33 +40,38 @@ public class ConsignmentServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		int selectedRoute = Integer.parseInt(request.getParameter("route"));
-		System.out.println(selectedRoute);
 		DBConnection dbConnection = null;
+        HttpSession session = request.getSession();
+
         List<Consignment> consignments = null;
         List<Vehicle> vehicles = null;
         Route r= null;
         try {
             dbConnection = DBConnection.getDbConnnection(); // Get instance of DBConnection
-            ConsignmentDao cDao = new ConsignmentDao(dbConnection);
-            consignments = cDao.getConsignmntsByRouteId(selectedRoute);
-            VehicleDao vDao = new VehicleDao(dbConnection);
-            RouteDao rDao= new RouteDao(dbConnection);
-            r = rDao.findOne(selectedRoute);
-            vehicles = vDao.findAll();
-            System.out.println(vehicles);
-            
+        	if(request.getParameter("route") != null) 
+        	 {
+        		int selectedRoute = Integer.parseInt(request.getParameter("route"));
+        		System.out.println(selectedRoute);
+                ConsignmentDao cDao = new ConsignmentDao(dbConnection);
+                consignments = cDao.getConsignmntsByRouteId(selectedRoute);
+                RouteDao rDao= new RouteDao(dbConnection);
+                r = rDao.findOne(selectedRoute);
+                session.setAttribute("selectedRoute", selectedRoute);
+                request.setAttribute("selectedRoute", selectedRoute);
+                request.setAttribute("selectedRouteName", r.getRouteName());
+        	}
+        	VehicleDao vDao = new VehicleDao(dbConnection);
+        	vehicles = vDao.findAll();
         } catch (ClassNotFoundException | 	SQLException e) {
             e.printStackTrace();
         }
 	        // Set the filtered consignments as a request attribute
-        	HttpSession session = request.getSession();
-            session.setAttribute("selectedRoute", selectedRoute);
-            session.setAttribute("selectedRouteName", r.getRouteName());
-        	session.setAttribute("vehicles", vehicles);
-        	session.setAttribute("filteredConsignments", consignments);
+            
+            request.setAttribute("vehicles", vehicles);
+        	request.setAttribute("filteredConsignments", consignments);
+			request.getRequestDispatcher("consignment-view.jsp").forward(request,  response);
+
 	        // Forward the request to the JSP page
-	        response.sendRedirect("public/consignment-view_3.jsp");
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		
@@ -89,7 +94,7 @@ public class ConsignmentServlet extends HttpServlet {
 			request.setAttribute("res", res);
 			
 		}
-		response.sendRedirect("public/consignment-view_3.jsp");
+		response.sendRedirect("consignment-view.jsp");
 		
 	}
 	

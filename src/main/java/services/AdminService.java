@@ -48,7 +48,7 @@ public class AdminService {
 	    public boolean scheduleOneConsignment(int vehicleid, int consignmentid, int routId) throws SQLException {
 	    	boolean res = true;
 	    	Connection connection = dbConnection.getConnection();
-	    	String query2 = "select TRIP_ID from trips where route_id = ? and vehicle_id = ?";
+	    	String query2 = "select TRIP_ID from trips where route_id = ? and vehicle_id = ? and remarks is null";
 	        PreparedStatement pstmt3 = connection.prepareStatement(query2);
 	        pstmt3.setInt(1, routId);
 	        pstmt3.setInt(2, vehicleid);
@@ -138,17 +138,7 @@ public class AdminService {
 	                System.out.println("error creating trip ");
 	            }
 	            
-	            String upd_qry3 = " update vehicles set STATUS = ? where vehicle_id = ?  ";
-    	        PreparedStatement pstmt_upt2 = connection.prepareStatement(upd_qry3);
-	            pstmt_upt2.setString(1,"ACTIVE" );
-	            pstmt_upt2.setInt(2, vehicleid);
-	            int rowno = pstmt_upt2.executeUpdate();
-	            if (rowno > 0) {
-	                System.out.println("vehicle  STATUS ");
-	            } else {
-	            	res = false;
-	                System.out.println("Failed  CHANGE the vehicle status");
-	            }
+	            
 	        }
             return res;
 

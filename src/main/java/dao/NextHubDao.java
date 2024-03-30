@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Consignment;
 import model.Hub;
 import model.NextHub;
 import model.Trip;
@@ -25,29 +26,30 @@ public class NextHubDao implements IDao<NextHub> {
     public NextHub create(NextHub nextHub) throws SQLException {
         Connection connection = dbConnection.getConnection();
 
-        String sql = "INSERT INTO next_hub (Hub_ID, Trip_ID, Status) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO next_hub (Hub_ID, Trip_ID, hub_name,   Status ) VALUES (?,?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, nextHub.getHubId());
             statement.setInt(2, nextHub.getTripId());
-            statement.setString(3, nextHub.getStatus());
+            statement.setString(3, nextHub.getHubName());
+            statement.setString(4, nextHub.getStatus());
             statement.executeUpdate();
         }
         return nextHub;
     }
     
     public boolean createAll(List<Hub> hubs, Trip trip) throws SQLException {
-        Connection connection = dbConnection.getConnection();
-    	String sql = "INSERT INTO next_hub (Hub_ID, Trip_ID, Status) VALUES (?, ?, 'UPCOMING')";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        
             for (Hub hub : hubs) {
-                statement.setInt(1, hub.getHubId());
-                statement.setInt(2, trip.getTripId());
-                statement.addBatch();
+            	NextHub nh = new NextHub();
+            	nh.setHubId(hub.getHubId());
+            	nh.setTripId(trip.getTripId());
+            	nh.setHubName(hub.getHubName());
+            	nh.setStatus("UPCOMING");
+            	create(nh);
             }
-            statement.executeBatch();
             return true;
         }
-    }
+    
     
 
     // Method to retrieve all NextHub records from the database
@@ -121,7 +123,7 @@ public class NextHubDao implements IDao<NextHub> {
         Connection connection = dbConnection.getConnection();
 
         List<NextHub> nextHubs = new ArrayList<>();
-        String sql = "SELECT * FROM next_hub WHERE Trip_ID = ?";
+        String sql = "SELECT * FROM next_hub WHERE Trip_ID = ? order by hub_id";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, tripId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -137,9 +139,10 @@ public class NextHubDao implements IDao<NextHub> {
 	private NextHub mapResultSetToNextHub(ResultSet resultSet) throws SQLException {
 
         NextHub nextHub = new NextHub();
-        nextHub.setNextHubId(resultSet.getInt("Next_Hub_ID"));
         nextHub.setHubId(resultSet.getInt("Hub_ID"));
+        nextHub.setHubName(resultSet.getString("HUB_NAME"));
         nextHub.setTripId(resultSet.getInt("Trip_ID"));
+        nextHub.setTime(resultSet.getTimestamp("Timestamp").toString());
         nextHub.setStatus(resultSet.getString("Status"));
         return nextHub;
     }
@@ -156,7 +159,77 @@ public class NextHubDao implements IDao<NextHub> {
             return true;
         }
 	}
+	
+	public boolean updateFirstUpcomingHubStatus(Trip trip) {
+		
+		//String sql = "UPDATE next_hub Status=? WHERE trip_id=? and hub_id = ?";
+		String sqlUpdate = "UPDATE next_hub SET Status = 'REACHED', Timestamp = sysdate WHERE Status = 'UPCOMING' AND Next_Hub_ID = (SELECT MIN(Next_Hub_ID) FROM next_hub WHERE Trip_id = ? and Status = 'UPCOMING')";
+	    
+	    try (Connection connection = dbConnection.getConnection();
+	         PreparedStatement preparedStatement = connection.prepareStatement(sqlUpdate)) {
+	    	preparedStatement.setInt(1, trip.getTripId());
+	        int rowsAffected = preparedStatement.executeUpdate();
+	        if (rowsAffected == 0) {
+	            System.out.println("No hubs with status 'UPCOMING' found to update.");
+	            return false;
+	        } else {
+	            System.out.println("First hub with status 'UPCOMING' updated to reached.");
+	            return true;
+	        }
 
+	    } catch (SQLException e) {
+	        e.printStackTrace(); // Handle or log the exception as needed
+	    }
+	    return false;
+	}
+	public List<Hub> fetchNextCurrent (Trip trip) throws SQLException{
+		List<Hub> res = new ArrayList<>();
+		Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        HubDao hDao = new HubDao(dbConnection);
+        
+        try {
+        	
+            connection = dbConnection.getConnection();
+            String currentStop = "select * from next_hub where trip_id=? AND status = 'REACHED' order by timestamp desc fetch first 1 row only";
+            String nextStop = "select * from next_hub where trip_id=? AND status = 'UPCOMING'";
+            statement = connection.prepareStatement(currentStop);
+            statement.setInt(1, trip.getTripId());
+            resultSet = statement.executeQuery();
+            Hub hub = null;
+            if (resultSet.next()) {
+            	
+            	NextHub nextHub = mapResultSetToNextHub(resultSet);
+            	if (nextHub != null) {
+            		hub = hDao.findOne(nextHub.getHubId());
+            		
+            	}
+            	
+            }
+            res.add(hub);
+            
+            statement = connection.prepareStatement(nextStop);
+            statement.setInt(1, trip.getTripId());
+            resultSet = statement.executeQuery();
+            Hub hubNext = null;
+            if (resultSet.next()) {
+           	NextHub nextHub = mapResultSetToNextHub(resultSet);
+            	if (nextHub != null) {
+            		hubNext = hDao.findOne(nextHub.getHubId());
+            		}
+            	
+            }
+            res.add(hubNext);
+            System.out.println("from next hub  dao curu next is" + res);
+            return res;
+            
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
+        }
+		
+	}
 
     
 }

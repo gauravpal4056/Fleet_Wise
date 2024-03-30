@@ -6,6 +6,7 @@ import model.Consignment;
 import model.Route;
 import model.Vehicle;
 import utils.DBConnection;
+import utils.DateHandler;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,14 +60,12 @@ public class TripDao implements IDao<Trip> {
         PreparedStatement statement = null;
         try {
             connection = dbConnection.getConnection();
-            String query = "UPDATE trips SET route_Id=?, vehicle_Id=?, trip_Start_Time=?, trip_End_Time=?, remarks=? WHERE trip_Id=?";
+            String query = "UPDATE trips SET route_Id=?,trip_end_time=sysdate, vehicle_Id=?, remarks=? WHERE trip_Id=?";
             statement = connection.prepareStatement(query);
             statement.setInt(1, trip.getRoute().getRouteId());
             statement.setInt(2, trip.getVehicle().getVehicleId());
-            statement.setString(3, trip.getTripStartTime());
-            statement.setString(4, trip.getTripEndTime());
-            statement.setString(5, trip.getRemarks());
-            statement.setInt(6, id);
+            statement.setString(3, trip.getRemarks());
+            statement.setInt(4, id);
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -154,10 +153,10 @@ public class TripDao implements IDao<Trip> {
     }
     
     public Trip gettripidfromdriverid(int driverid) throws SQLException {
-		Trip trip = new Trip();
+		Trip trip = null;
 
 		Connection connection = dbConnection.getConnection();
-		String query = " select trip_id from trips where vehicle_id = (select vehicle_id from vehicles where driver_id = ? ) ";
+		String query = " select trip_id from trips where remarks!= 'FINISHED' OR remarks is null and vehicle_id = (select vehicle_id from vehicles where driver_id = ? ) ";
 
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setInt(1, driverid);
@@ -169,18 +168,46 @@ public class TripDao implements IDao<Trip> {
 
 		return trip;
 	}
+    
+    public List<Trip> findAllByDriverId(int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<Trip> trips = new ArrayList<>();
+        try {
+            connection = dbConnection.getConnection();
+    		String query = " select * from trips where vehicle_id = (select vehicle_id from vehicles where driver_id = ? ) ";
+
+            //String query = "SELECT * FROM trips";
+            statement = connection.prepareStatement(query);
+    		statement.setInt(1, id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Trip trip = extractTripFromResultSet(resultSet);
+                trips.add(trip);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
+        }
+        return trips;
+    }
 
     private Trip extractTripFromResultSet(ResultSet resultSet) throws SQLException {
         Trip trip = new Trip();
         trip.setTripId(resultSet.getInt("trip_Id"));
-        Route route = new Route();
-        route.setRouteId(resultSet.getInt("route_Id"));
+        RouteDao rDao = new RouteDao(dbConnection);	
+        Route route = rDao.findOne(resultSet.getInt("route_Id"));
         trip.setRoute(route);
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleId(resultSet.getInt("vehicle_id"));
         trip.setVehicle(vehicle);
-        trip.setTripStartTime(resultSet.getString("trip_Start_Time"));
-        trip.setTripEndTime(resultSet.getString("trip_End_Time"));
+        
+        trip.setTripStartTime(resultSet.getString("TRIP_START_TIME"));
+        trip.setTripEndTime(resultSet.getString("TRIP_END_TIME"));
+        
+        //trip.setTripStartTime(DateHandler.sqlTimeToStr(resultSet.getTimestamp("trip_Start_Time")));
+        //trip.setTripEndTime(DateHandler.sqlTimeToStr(resultSet.getTimestamp("trip_End_Time")));
         trip.setRemarks(resultSet.getString("remarks"));
         //List<Consignment> consignments = consignmentDao.getConsignmentsByTripId(resultSet.getInt("trip_Id"));
         trip.setConsignments(null);

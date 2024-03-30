@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Issue {
@@ -10,8 +11,8 @@ public class Issue {
 	private Vehicle vehicle;
     private Consignment consignment;
     private String description;
-    private String raisedOn;
-    private String resolvedOn;
+    private Date raisedOn;
+    private Date resolvedOn;
     private String remarks;
     private String status;
 	public Issue() {
@@ -19,7 +20,7 @@ public class Issue {
 		// TODO Auto-generated constructor stub
 	}
 	public Issue(int issueId, Driver driver, Vehicle vehicle, Consignment consignment, String description,
-			String raisedOn, String resolvedOn, String remarks, String status) {
+			Date raisedOn, Date resolvedOn, String remarks, String status) {
 		super();
 		this.issueId = issueId;
 		this.driver = driver;
@@ -30,12 +31,6 @@ public class Issue {
 		this.resolvedOn = resolvedOn;
 		this.remarks = remarks;
 		this.status = status;
-	}
-	@Override
-	public String toString() {
-		return "Issue [issueId=" + issueId + ", driver=" + driver + ", vehicle=" + vehicle + ", consignment="
-				+ consignment + ", description=" + description + ", raisedOn=" + raisedOn + ", resolvedOn=" + resolvedOn
-				+ ", remarks=" + remarks + ", status=" + status + "]";
 	}
 	public int getIssueId() {
 		return issueId;
@@ -67,16 +62,16 @@ public class Issue {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getRaisedOn() {
+	public Date getRaisedOn() {
 		return raisedOn;
 	}
-	public void setRaisedOn(String raisedOn) {
+	public void setRaisedOn(Date raisedOn) {
 		this.raisedOn = raisedOn;
 	}
-	public String getResolvedOn() {
+	public Date getResolvedOn() {
 		return resolvedOn;
 	}
-	public void setResolvedOn(String resolvedOn) {
+	public void setResolvedOn(Date resolvedOn) {
 		this.resolvedOn = resolvedOn;
 	}
 	public String getRemarks() {
@@ -90,6 +85,12 @@ public class Issue {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	@Override
+	public String toString() {
+		return "Issue [issueId=" + issueId + ", driver=" + driver + ", vehicle=" + vehicle + ", consignment="
+				+ consignment + ", description=" + description + ", raisedOn=" + raisedOn + ", resolvedOn=" + resolvedOn
+				+ ", remarks=" + remarks + ", status=" + status + "]";
 	}
 	@Override
 	public int hashCode() {

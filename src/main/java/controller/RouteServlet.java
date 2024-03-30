@@ -58,7 +58,7 @@ public class RouteServlet extends HttpServlet {
         	session.setAttribute("routes", routes);
 
 	        // Forward the request to the JSP page
-	        response.sendRedirect("public/route-view.jsp");
+	        response.sendRedirect("route-view.jsp");
 	}
 
 	/**

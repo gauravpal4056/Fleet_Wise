@@ -57,7 +57,7 @@ public class DriverDao implements IDao<Driver> {
 		boolean result=false;
 		try {
 			Connection connection=dbConnection.getConnection();
-			String sqlQuery="update drivers set name=?,gender=?,age=?,Licence_NO=?,Phone_Number=?,Email_Address=?,Address=?,Joining_Date=?,Available=? where driver_Id=?";
+			String sqlQuery="update drivers set name=?,gender=?,age=?,Licence_NO=?,Phone_Number=?,Email_Address=?,Address=?,Available=? where driver_Id=?";
 			PreparedStatement preparedStatement=connection.prepareStatement(sqlQuery);
 			preparedStatement.setString(1, driver.getName());
 			preparedStatement.setString(2, driver.getGender());
@@ -66,12 +66,12 @@ public class DriverDao implements IDao<Driver> {
 			preparedStatement.setLong(5, driver.getPhoneNumber());
 			preparedStatement.setString(6, driver.getEmailAddress());
 			preparedStatement.setString(7, driver.getAddress());
-			preparedStatement.setDate(8, DateHandler.javaToSqlDate(driver.getJoiningDate()));
-			preparedStatement.setString(9, driver.getAvailable());
-			preparedStatement.setInt(10, id);
+			preparedStatement.setString(8, "TRUE");
+			preparedStatement.setInt(9, id);
 			if(preparedStatement.executeUpdate()>0) {
 				result=true;
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -139,7 +139,6 @@ public class DriverDao implements IDao<Driver> {
 //			driver driver = new driver(resultSet.getInt("driverId"), resultSet.getString("driverName"),resultSet.getString("email"));
 			// using column position in result
         	driver = new Driver(resultSet.getInt(1), resultSet.getString(2),resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getLong(6),resultSet.getString(7),resultSet.getString(8),DateHandler.sqlDateToJava(resultSet.getDate(9)), resultSet.getString(10));
-			System.out.println(driver);
 			drivers.add(driver);
 
 		}

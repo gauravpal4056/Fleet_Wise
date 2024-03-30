@@ -76,14 +76,15 @@ public class ConsignmentDao implements IDao<Consignment> {
         }
     }
     
-    public boolean updateStatusByTripId(int id) throws SQLException {
+    public boolean updateStatusByTripId(int id, String status) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null; 
         try {
             connection = dbConnection.getConnection();
             String query = "UPDATE consignments SET status=? WHERE trip_Id=?";
             statement = connection.prepareStatement(query);
-            statement.setInt(1, id);
+            statement.setString(1, status);
+            statement.setInt(2, id);
             int affectedRows = statement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -130,7 +131,38 @@ public class ConsignmentDao implements IDao<Consignment> {
         }
         return consignment;
     }
+    
+    public boolean updateStatusHubReached(int tripId) throws SQLException {
+    	Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Consignment consignment = null;
+        int hubId;
+        try {
+            connection = dbConnection.getConnection();
+            String query = "SELECT hub_id FROM next_hub WHERE trip_id=? order by timestamp";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, tripId);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                hubId = resultSet.getInt("hub_id");
+                query = "update consignments set status='DELIVERED' where hub_id=? and trip_id=? ";
+                statement = connection.prepareStatement(query);
+                statement.setInt(1, hubId);
+                statement.setInt(2, tripId);
 
+                resultSet = statement.executeQuery();
+                return true;
+            }
+            
+            
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw e;
+        }
+        return false;
+    }
+    
     @Override
     public List<Consignment> findAll() throws SQLException {
         Connection connection = null;
@@ -175,16 +207,18 @@ public class ConsignmentDao implements IDao<Consignment> {
         return consignments;
     }
     
-    public List<Consignment> getConsignmentsByHubId(int hubId) throws SQLException {
+    public List<Consignment> getConsignmentsByHubId(int hubId, int tripId) throws SQLException {
         List<Consignment> consignments = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = dbConnection.getConnection();
-            String query = "SELECT * FROM consignments WHERE hub_Id=?";
+            String query = "SELECT * FROM consignments WHERE hub_Id=? and trip_id =?";
             statement = connection.prepareStatement(query);
             statement.setInt(1, hubId);
+            statement.setInt(2, tripId);
+
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Consignment consignment = extractConsignmentFromResultSet(resultSet);
@@ -253,7 +287,9 @@ public class ConsignmentDao implements IDao<Consignment> {
         Hub hub = hubDao.findOne(resultSet.getInt("hub_Id"));
         consignment.setHub(hub);
         TripDao tripDao = new TripDao(dbConnection);
-        Trip trip = tripDao.findOne(resultSet.getInt("trip_Id"));
+        Trip trip = new Trip();
+        trip.setTripId(resultSet.getInt("trip_Id"));
+        //Trip trip = tripDao.findOne(resultSet.getInt("trip_Id"));
         consignment.setTrip(trip);
         consignment.setConsignmentDate(DateHandler.sqlTimeToJava(resultSet.getTimestamp("consignment_Date")));
         consignment.setConsignmentName(resultSet.getString("consignment_Name"));

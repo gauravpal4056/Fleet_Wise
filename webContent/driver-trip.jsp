@@ -14,9 +14,15 @@
     String formattedDate = now.format(formatter);
 %>
 <%@page import="model.Driver" %>
+<%@page import="model.Consignment" %>
 <%@page import="model.Vehicle" %>
+<%@page import="model.NextHub" %>
 <%@page import="model.Route" %>
+<%@page import="model.Hub" %>
 <%@page import="model.Trip" %>
+<%@ page import="utils.DateHandler" %>
+
+<%@page import="java.util.*" %>
 
 
 <!DOCTYPE html>
@@ -63,194 +69,303 @@
 		::-webkit-scrollbar-thumb:hover {
 		  background: #555; 
 		}
-        /* Timeline Container */
-        .timeline-t {
-          background: var(--primary-color);
-          margin: 20px auto;
-          padding: 15px;
-        }
-        
-        /* Card container */
-        .card-t {
-          position: relative;
-          max-width: 350px;
-        }
-        .timeline-container{
-            width: 100%;
-            /* background-color: red; */
-            display: flex;
-            justify-content: space-between
-        }
-        
-        /* setting padding based on even or odd */
-        .card-t:nth-child(odd) {
-          padding: 30px 0 30px 30px;
-        }
-        .card-t:nth-child(even) {
-          padding: 30px 30px 30px 0;
-        }
-        /* Global ::before */
-        .card-t::before {
-          content: "";
-          position: absolute;
-          width: 50%;
-          border: solid #9f9999;
-        }
-        
-        /* Setting the border of top, bottom, left */
-        .card-t:nth-child(odd)::before {
-          left: 0px;
-          top: -4.5px;
-          bottom: -4.5px;
-          border-width: 5px 0 5px 5px;
-          border-radius: 50px 0 0 50px;
-        }
-        .t-f-c{
-            width: 100%;
-            display: flex;
-            gap:30px;
-            justify-content: center;
-        }
-        
-        /* Setting the top and bottom to "-5px" because earlier it was out of a pixel in mobile devices */
-        @media only screen and (max-width: 400px) {
-        
-            .footer-left-timeline, .footer-middle-timeline, .footer-right-timeline{
-                width: 100%;
-                display: flex;
-                justify-content: center;
-            }
-           .t-f-c{
-            display: block;
-            /* display: flex; */
-            /* justify-content: center; */
-           }
-            .timeline-footer{
-                /* width: 100%;
-                display: flex;
-                justify-content: space-around; */
-                padding-left: 0px;
-            }
-          .card-t:nth-child(odd)::before {
-            top: -5px;
-            bottom: -5px;
-          }
-          .timeline-container{
-            width: 100%;
-            /* background-color: red; */
-            display: block;
-        }
-        }
-        
-        /* Setting the border of top, bottom, right */
-        .card-t:nth-child(even)::before {
-          right: 0;
-          top: 0;
-          bottom: 0;
-          border-width: 5px 5px 5px 0;
-          border-radius: 0 50px 50px 0;
-        }
-        
-        /* Removing the border if it is the first card */
-        .card-t:first-child::before {
-          border-top: 0;
-          border-top-left-radius: 0;
-        }
-        
-        /* Removing the border if it is the last card  and it's odd */
-        .card-t:last-child:nth-child(odd)::before {
-          border-bottom: 0;
-          border-bottom-left-radius: 0;
-        }
-        
-        /* Removing the border if it is the last card  and it's even */
-        .card-t:last-child:nth-child(even)::before {
-          border-bottom: 0;
-          border-bottom-right-radius: 0;
-        }
-        
-        /* Information about the timeline */
-        .info-t {
-          display: flex;
-          width:200px;
-          flex-direction: column;
-          background: #333;
-          color: gray;
-          border-radius: 10px;
-          padding: 10px;
-        }
-        
-        /* Title of the card */
-        .title-t {
-          color: white;
-          position: relative;
-        }
-        
-        /* Timeline dot  */
-        .title-t::before {
-          content: "";
-          position: absolute;
-          width: 15px;
-          height: 15px;
-          background: white;
-          border-radius: 50%;
-          border: 3px solid #333;
-        }
-        
-        /* text right if the card is even  */
-        .card-t:nth-child(even) > .info-t > .title-t {
-          text-align: right;
-        }
-        
-        /* setting dot to the left if the card is odd */
-        .card-t:nth-child(odd) > .info-t > .title-t::before {
-          left: -45px;
-        }
-        
-        /* setting dot to the right if the card is odd */
-        .card-t:nth-child(even) > .info-t > .title-t::before {
-          right: -45px;
-        }
-        
-            </style>
-        
-        <style>
-            table {
-              font-family: arial, sans-serif;
-              border-collapse: collapse;
-              width: 100%;
-             /* margin-right: 1px; */
-            }
-            
-            td, th {
-              border: 1px solid #dddddd;
-              text-align: left;
-              padding: 8px;
-            }
-            
-            tr:nth-child(even) {
-              background-color: #dddddd;
-            }
-            .t-table{
-                padding-right: 25px;
-                width: 50%;
-        
-            }
-            .t-table table{
-                margin-top: 25px;
-            }
-            .timeline-footer{
-                width: 100%;
-                /* background-color: red; */
-                display: flex;
-                justify-content: space-around;
-                padding-left: 425px;
-            }
-            </style>
-        
-        
-	
+		/* Timeline Container */
+.timeline-t {
+  background: var(--primary-color);
+  margin: 20px auto;
+  padding: 20px;
+}
+
+/* Card container */
+.card-t {
+  position: relative;
+  max-width: 400px;
+}
+.timeline-container{
+    width: 100%;
+    /* background-color: red; */
+    display: flex;
+    justify-content: space-between
+}
+
+/* setting padding based on even or odd */
+.card-t:nth-child(odd) {
+  padding: 30px 0 30px 30px;
+}
+.card-t:nth-child(even) {
+  padding: 30px 30px 30px 0;
+}
+/* Global ::before */
+.card-t::before {
+  content: "";
+  position: absolute;
+  width: 50%;
+  border: solid #9f9999;
+}
+
+/* Setting the border of top, bottom, left */
+.card-t:nth-child(odd)::before {
+  left: 0px;
+  top: -4.5px;
+  bottom: -4.5px;
+  border-width: 5px 0 5px 5px;
+  border-radius: 50px 0 0 50px;
+}
+.t-f-c{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Setting the top and bottom to "-5px" because earlier it was out of a pixel in mobile devices */
+@media only screen and (max-width: 700px) {
+
+    .footer-left-timeline, .footer-middle-timeline, .footer-right-timeline{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+   .t-f-c{
+    display: block;
+    /* display: flex; */
+    /* justify-content: center; */
+   }
+    .timeline-footer{
+        /* width: 100%;
+        display: flex;
+        justify-content: space-around; */
+        padding-left: 0px;
+    }
+  .card-t:nth-child(odd)::before {
+    top: -5px;
+    bottom: -5px;
+  }
+  .timeline-container{
+    width: 100%;
+    /* background-color: red; */
+    display: block;
+}
+}
+
+/* Setting the border of top, bottom, right */
+.card-t:nth-child(even)::before {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border-width: 5px 5px 5px 0;
+  border-radius: 0 50px 50px 0;
+}
+
+/* Removing the border if it is the first card */
+.card-t:first-child::before {
+  border-top: 0;
+  border-top-left-radius: 0;
+}
+
+/* Removing the border if it is the last card  and it's odd */
+.card-t:last-child:nth-child(odd)::before {
+  border-bottom: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Removing the border if it is the last card  and it's even */
+.card-t:last-child:nth-child(even)::before {
+  border-bottom: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Information about the timeline */
+.info-t {
+  display: flex;
+  flex-direction: column;
+  background: #333;
+  color: gray;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* Title of the card */
+.title-t {
+  color: white;
+  position: relative;
+}
+
+/* Timeline dot  */
+.title-t::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  border: 3px solid #333;
+}
+
+/* text right if the card is even  */
+.card-t:nth-child(even) > .info-t > .title-t {
+  text-align: right;
+}
+
+/* setting dot to the left if the card is odd */
+.card-t:nth-child(odd) > .info-t > .title-t::before {
+  left: -45px;
+}
+
+/* setting dot to the right if the card is odd */
+.card-t:nth-child(even) > .info-t > .title-t::before {
+  right: -45px;
+}
+
+    </style>
+
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+     /* margin-right: 1px; */
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    .t-table{
+        padding-right: 25px;
+        width: 50%;
+
+    }
+    .t-table table{
+        margin-top: 25px;
+    }
+    .timeline-footer{
+        width: 100%;
+        /* background-color: red; */
+        display: flex;
+        justify-content: space-around;
+        padding-left: 425px;
+    }
+    </style>
+
+
+   
     <script>
+        function toggleDropdown() {
+          var dropdownContent = document.getElementById("myDropdown");
+          dropdownContent.classList.toggle("show");
+        }
+        </script>
+
+<link href="css/own.css" rel="stylesheet">
+<style>
+    .card {
+ width: 235px;
+ box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+ height: 320px;
+ padding: .8em;
+ background: #f5f5f5;
+ position: relative;
+ overflow: visible;
+ box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.row1{
+    display: flex;
+    justify-content: space-around;
+}
+
+.card-img {
+ background-color: #ffcaa6;
+ height: 40%;
+ width: 100%;
+ border-radius: .5rem;
+ transition: .3s ease;
+}
+
+.card-info {
+ padding-top: 10%;
+}
+
+svg {
+ width: 20px;
+ height: 20px;
+}
+
+.card-footer {
+ width: 100%;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding-top: 10px;
+ border-top: 1px solid #ddd;
+}
+.t-t{
+    color: black;
+}
+/Text/
+.text-title {
+ font-weight: 900;
+ font-size: 1.2em;
+ line-height: 1.5;
+}
+
+/* .dbb{
+    kground-color: rgb(255, 255, 255);
+} */
+
+
+.text-body {
+
+ font-size: 18px;
+ /* padding-top: 10px; */
+ 
+}
+
+/Button/
+.card-button {
+ border: 1px solid #252525;
+ display: flex;
+ padding: .3em;
+ cursor: pointer;
+ border-radius: 50px;
+ transition: .3s ease-in-out;
+}
+
+/*Hover
+.card-img:hover {
+ transform: translateY(-25%);
+ box-shadow: rgba(226, 196, 63, 0.25) 0px 13px 47px -5px, rgba(180, 71, 71, 0.3) 0px 8px 16px -8px;
+}*/
+
+.card-button:hover {
+ border: 1px solid #ffcaa6;
+ background-color: #ffcaa6;
+}
+
+@media(max-width:500px){
+    .card{
+        width: 80%;
+        margin: 10px 0;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+}
+
+.row{
+    display: flex;
+    justify-content: space-around;
+}
+.c-i{
+height:100%;}
+
+		
+		
+	</style>
+	
+	<script>
         function toggleDropdown() {
           var dropdownContent = document.getElementById("myDropdown");
           dropdownContent.classList.toggle("show");
@@ -312,12 +427,22 @@
             
          
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" 
+                <a class="nav-link collapsed" href="TripServlet" 
                    >
                     <span class="material-symbols-outlined">
                        route
                         </span>
-                    <span>Trip</span>
+                    <span>Active Trip</span>
+                </a>
+                
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="TripFetchServlet" 
+                   >
+                    <span class="material-symbols-outlined">
+                       route
+                        </span>
+                    <span>All Trips</span>
                 </a>
                 
             </li>
@@ -359,7 +484,7 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <h1 style="font-weight: 900" class="text-gray-700">Trip</h1>
+                    <h1 style="font-weight: 900" class="text-gray-700">Active Trip</h1>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -440,7 +565,10 @@
                 <!-- Begin Page Content -->
                 <!-- Begin Page Content -->
                 <!-- Content Row -->
-                
+                <%Trip trip = (Trip)request.getAttribute("trip");
+                System.out.println(trip);
+                			if(trip!=null && trip.getRemarks()==null){
+                		%>
                 	<div class="row">
                 	
                 		<div class="text-center">
@@ -448,56 +576,61 @@
                      	</div>
                      	<h3 class="text-danger" style="text-align: center; ">Trip not started</h3>
                      	
+                		<%Vehicle v =  (Vehicle)session.getAttribute("vehicle");%>
                 		<div style="display:flex; justify-content: center; " >
                 			<div style="width:400px;" class="card shadow">
 						      <div class="card-body">
 						        <h5 class="card-title">Trip assigned </h5>
-						        <h6>Trip id :  </h6>
-     						    <h6>Route name :  </h6>
-     						    <h6>Consignme id :  </h6>
-     						    <h6>Vehicle id :  </h6>
-     					        <h6>Started on :  </h6>
+						        <h6>Trip id : <%=trip.getTripId() %> </h6>
+     						    <h6>Route : <%=trip.getRoute().getRouteName() %> </h6>
+     						    <h6>Vehicle id : <%=v.getModel() %> </h6>
+     					        <h6>Started on : <%=trip.getTripStartTime() %> </h6>
 						        
-						        <a	 href="#" class="btn btn-primary">Start</a>
+						        <form method="post" action="TripServlet">
+						        	<input hidden name="type" value="start"/>
+       							    <button type="submit" class="btn btn-primary">Start Trip</button>
+						        </form>
 						      </div>
 						    </div>
                 		</div>
                 	</div>
+                	<%} %>
                 
-                    <div class="row">
+                    <%if(trip!=null && trip.getRemarks()!=null && trip.getRemarks().equalsIgnoreCase("ongoing")){ %>
+					<div class="row">
 
                         <div  class="time-main-container">
                             <div  class="timeline-container">
                                 <div style="overflow:scroll; height:450px;" class="timeline-t">
 	                                    <div class="outer-t">
-                                    
-                                      <div class="card-t">
-                                        <div class="info-t">
-                                          <h5 class="title-t">Reached</h5>
-                                          <p>Hub Mandideep </p>
-                                          <h6>12:30 </h6>
-                                        </div>
-                                      </div>
-                                      <div class="card-t">
-                                        <div class="info-t">
-                                          <h5 class="title-t">Reached</h5>
-                                          <p>Hub Mandideep </p>
-                                          <h6>12:30 </h6>
-                                        </div>
-                                      </div>
-                                      <div class="card-t">
-                                        <div class="info-t">
-                                          <h5 class="title-t">Reached</h5>
-                                          <p>Hub Mandideep </p>
-                                          <h6>12:30 </h6>
-                                        </div>
-                                      </div>		
-                                     
+                                    <%List<NextHub> nextHubs = (List<NextHub>) request.getAttribute("nextHub");
+                                    	if(nextHubs != null && nextHubs.size()>0){
+                                    		for(NextHub n : nextHubs){
+                                    %>
+                        					<%if(n.getStatus().equals("REACHED")) {%>
+                                    			<div class="card-t">
+			                                        <div class="info-t bg-gray-300 text-gray-900">
+			                                          <h5 class="title-t text-gray-900">Reached</h5>
+			                                          <p><%=n.getHubName() %> </p>
+			                                          <h6><%=n.getTime() %> </h6>
+			                                        </div>
+			                                      </div>
+						                    <%}else{ %>
+			                                 	<div class="card-t">
+			                                        <div class="info-t">
+			                                          <h5 class="title-t">Upcoming</h5>
+			                                          <p><%=n.getHubName() %> </p>
+			                                          <h6> </h6>
+			                                        </div>
+			                                    </div>
+			                                 <%} %>
+                                    <%} }else{%>
+                                    	<h1>no hubs found for this trip maybe admin messed up</h1>
+                                    <%} %>
                                     </div>
                                   </div>
                                   <hr>
-                            
-                                  <div class="t-table">
+                            <div class="t-table">
                                     
                             <h3>Current Consingment</h3>
                             
@@ -505,36 +638,80 @@
                               <tr>
                                 <th>cid</th>
                                 <th>Conssignment-name</th>
-                                <th>Conssingment-Address</th>
+                                <th>Hub-Address</th>
                                 <th>Date</th>
                               </tr>
-                             
+                             <%List<Consignment> cs =(List<Consignment>) request.getAttribute("currCon");
+                             	if(cs!=null && cs.size()>0){
+                             		for(Consignment c: cs){
+                             	
+                             %>
+                             <tr>
+                                <td><%= c.getConsignmentId()%></td>
+                                <td><%= c.getConsignmentName() %></td>
+                                <td><%= c.getHub().getHubName() %></td>
+                                <td><%= DateHandler.javaToStr(c.getConsignmentDate()) %></td>
+                            </tr>
+                              <%}}else{ %>
+                              <p class="text-danger">No consignment found for this hub please move forward</p>
+                              <%} %>
                             </table>
-                                  </div>
+							</div>
                             </div>
+                            <%List<Hub> currNext  = (List<Hub>) request.getAttribute("currNext");
+                            	System.out.println(currNext);
+                            %>
                          <div  class="t-f-c">
                             <div style="padding:10px;" class="footer-left-timeline bg-gray-900 rounded text-gray-400 border border-gray-900">
                               <h5 class="text-gray-600">Current Hub</h3>
-                              <h3>Hub Satlapur</h2>
+                              <%if(currNext.get(0)==null){ %>
+                              <h3>Main Hub</h2>
+                              <%}else{ %>
+                              <h3><%= currNext.get(0).getHubName()%></h3>
+                              <%} %>
                              </div>
                              <div style="padding:10px;" class="footer-left-timeline bg-gray-900 rounded text-gray-400 border border-gray-900">
                               <h5 class="text-gray-600">Next Hub</h5>
-                              <h3 class="text-success">Hub Satlapur</h3>
+                              <%if(currNext.get(1)==null){ %>
+                              <h3 class="text-success">Finish Trip</h3>
+                              <%}else{ %>
+                              <h3><%= currNext.get(1).getHubName()%></h3>
+                              <p><%= currNext.get(1).getAddress()%></p>
+                              <%} %>
                              </div>
-                             <div style="display: flex; align-items: center;" class="footer-right-timeline btn	btn-primary ">
-                              <h3>Reached</h3>
-                             </div>
+                             <%if(currNext.get(1)!= null) {%>
+                             <form method="post" action="TripServlet">
+						        	<input hidden name="type" value="forward"/>
+       							    <button type="submit" class="btn btn-primary">Reached Trip</button>
+							</form>
+							<%}else {%>
+							<form method="post" action="TripServlet">
+						        	<input hidden name="type" value="finish"/>
+       							    <button type="submit" class="btn btn-primary">Finish Trip</button>
+							</form>
+							<%} %>
                          </div>
                         </div>
                       
                     </div>
-                <!-- End Page Content -->
-                <!-- end Page Content -->
-                
-                
-                
-                
-                
+                    <%} %>
+                    
+                    <%if(trip!=null&& trip.getRemarks()!=null && trip.getRemarks().equalsIgnoreCase("finished")){%>
+                    	
+                    <div>
+                    	<h1>trip finished</h1>
+                    	<div class="text-center">
+                         	<img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 20rem;" src="img/waiting.jpg" alt="...">
+                     	</div>
+                    </div>
+                   <%} %>
+                   <%if(trip==null){ %>
+                   <div  class="text-center conatainer-fluid">
+                        <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 20rem;" src="img/waiting.jpg" alt="...">
+                        <h1>No trips found for you !</h1>
+						<button class="btn btn-warning"><a class="text-gray-200" href="TripServlet" >Refresh</a></button>
+                    </div>
+                    <%} %>
             </div>
             <!-- End of Main Content -->
 
