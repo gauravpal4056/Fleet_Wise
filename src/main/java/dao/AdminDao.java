@@ -23,7 +23,7 @@ public class AdminDao implements IDao<Admin> {
     public Admin create(Admin admin) throws Exception {
     	Connection connection = dbConnection.getConnection();
     	String query = "INSERT INTO Admins (Name, Gender, Phone_Number, Email_Address, Password) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, admin.getName());
             statement.setString(2, admin.getGender());
             statement.setLong(3, admin.getPhoneNumber());
@@ -31,14 +31,6 @@ public class AdminDao implements IDao<Admin> {
             statement.setString(5, admin.getPassword());
 
             statement.executeUpdate();
-
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    admin.setAdminId(generatedKeys.getInt(1));
-                } else {
-                    throw new RuntimeException("Creating admin failed, no ID obtained.");
-                }
-            }
         }
         return admin;
     }

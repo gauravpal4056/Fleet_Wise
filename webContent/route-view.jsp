@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%
 	if(session.getAttribute("user") == null){
@@ -98,8 +98,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        <a class="collapse-item" href="consignment-delete.jsp">Edit Consignment </a> 
-						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
+                                                                        <a class="collapse-item" href="hub-add.jsp">Add Hub</a>
+                        
                     </div>
                 </div>
             </li>
@@ -116,7 +116,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="RouteServlet">View All Route</a>
                         <a class="collapse-item" href="route-add.jsp">Add Route</a>
-                        <a class="collapse-item" href="route-delete.jsp">Edit Route</a>
+                        
                     </div>
                 </div>
             </li>
@@ -134,7 +134,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
 						<a class="collapse-item" href="VehicleServlet">View Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
-                        <a class="collapse-item" href="VehicleServlet">Edit Vehicle</a>
                     </div>
                 </div>
             </li>
@@ -153,7 +152,6 @@
                         <h6 class="collapse-header">Driver Detail</h6>
                         <a class="collapse-item" href="DriverServlet">View All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
-                        <a class="collapse-item" href="DriverServlet">Edit Driver</a>
                     </div>
                 </div>
             </li>
@@ -187,9 +185,18 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                     	<a class="collapse-item" href="AdminServlet">View Admin</a>
                         <a class="collapse-item" href="admin-add.jsp">Add Admin</a>
-                        <a class="collapse-item" href="AdminServlet">Edit Admin</a>
                     </div>
                 </div>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="AdminIssue" 
+                   >
+                    <span class="material-symbols-outlined">
+                       list
+                        </span>
+                    <span>Issues</span>
+                </a>
+                
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -287,160 +294,91 @@
                     <!-- Page Heading -->
 
                     <div class="text-center">
-                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 25rem;" src="img/admin.jpg" alt="...">
+                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 25rem;" src="https://img.freepik.com/free-vector/delivery-online-shipping-services-online-order-tracking-delivery-home-office-courier-by-truck-scooter-bicycle-parcel-send-location-pins-mobile-phone-by-delivery-man_1150-58774.jpg?t=st=1711989838~exp=1711993438~hmac=982306b3bb04a413f2704307884e979dba9191d9dbeabe1ddc8a85c3894c457d&w=996" alt="...">
                      </div>
 
                     <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Availability (cards) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Available Vehicle</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">4</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <span class="material-symbols-outlined fa-2x text-gray-300">
-                                                local_shipping
-                                                </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Available Drivers </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">5,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Routes Covered
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                             Hubs reached</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-					<a href="RouteServlet"><button style="margin-bottom:20px;" class="btn btn-warning " type="button"
+                    
+					<a href="RouteServlet"><button style="margin-bottom:20px; width:100px" class="btn btn-warning " type="button"
                                     aria-haspopup="true"
                                     aria-expanded="false">
                                     Refresh
                                 </button></a>
                     <!-- Content Row -->
-					<div class="row ">
-					
-					
-					<% 
-			                	List<Route> rs = (List<Route>) session.getAttribute("routes"); 
-                        		int counter = 1;
-			                	if (rs != null && rs.size()!=0){
-				                for (Route r: rs) {
-				             %>
-				
-                        	
-				             	<div class="card shadow mb-4">
-                                <!-- Card Header - Accordion -->
-	                                <a href="#collapseCardExample" class="d-block bg-primary  card-header py-3" data-toggle="collapse"
-	                                    role="button" aria-expanded="true" aria-controls="collapseCardExample<%=counter %>">
-	
-	                                    <h6 class="m-0 font-weight-bold text-gray-200"><%=r.getRouteName() %></h6>
-	                                </a>
-	                                <!-- Card Content - Collapse -->
-	                                <div class="collapse show border" id="collapseCardExample">
-	                                    <div class="card-body">
-	                                        Starting Point - <%=r.getStartPoint() %><br>
-                                     		Destination Point - <%=r.getDestinationPoint() %>
-	                                    </div>
-	                                    <div class="card-body font-weight-bold">
-	                                    Hubs Connected
-	                                    <ul>
-	                                    	<% 
-							                	List<Hub> hs = (List<Hub>) session.getAttribute("hubs"); // Assuming there's a method findAllRoutes() in your DAO
-							                	if (hs != null && hs.size()!=0 ){
-							                		boolean isHub=false;
-								                for (Hub h: hs) {
-								                	if(h.getRoute()!=null && h.getRoute().getRouteId()==(r.getRouteId())){
-									                isHub=true;
-								             %>
-	                                    	<li><%=h.getHubName()%>  <%= h.getCity()%>  </li>
-	                                    	<% 
-							                }
-							                	
-							                }
-								                if(!isHub)%><h6 class="text-danger">No hubs found</h6>
-								            <% 
+						<div class="row ">
+                        		
+                        		<div id="London1d" class="tabcontent">
+                        									            <h6 class="font-weight-bold text-gray-700"> All Route</h6>
+                        		
+								    <div class="card shadow mb-4">
+								        
+								                  
+								        <div class="card-body">
+								            <div class="table-responsive">
+								                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								                    <thead>
+								                        <tr>
+								                            <th>Route ID</th>
+								                            <th>Route Name </th>
+								                            <th>Starting Point</th>
+								                            <th>Destination Point</th>
+								                            <th>Connected Hubs</th>
+								                            <th></th>
+								                        
+								                        </tr>
+								                    </thead>
+								                    
+								         <% 
+								         List<Route> routes = (List<Route>) request.getAttribute("routes");
+								         System.out.print(routes);
+								            if (routes != null && !routes.isEmpty()) {
+								                for (Route route : routes) {
+								        %>
+								             
+								                    <tbody>
+								            <tr>
+								            <td><%= route.getRouteId() %></td>
+								            <td><%= route.getRouteName() %></td>
+								            <td><%= route.getStartPoint() %></td>
+								            <td><%= route.getDestinationPoint() %></td>
+											<td>
+			                                    <ul>
+			                                    	<% 
+									                	List<Hub> hs = (List<Hub>) request.getAttribute("hubs"); // Assuming there's a method findAllRoutes() in your DAO
+									                	if (hs != null && hs.size()!=0 ){
+									                		boolean isHub=false;
+										                for (Hub h: hs) {
+										                	if(h.getRoute()!=null && h.getRoute().getRouteId()==(route.getRouteId())){
+											                isHub=true;
+										             %>
+			                                    	<li><%=h.getHubName()%>  <%= h.getCity()%>  </li>
+			                                    	<% 
+									                }
+									                	
+									                }
+										                if(!isHub)%><h6 class="text-danger">No hubs found</h6>
+										            <% 
+										                }
+										                   // Check if status is "pending"
+											        %>
+			                                    </ul>
+											</td>
+								            <td><a href="UpdateRouteServlet?Route_Id=<%= route.getRouteId() %>" class="update_button">Update</a></td>
+								        </tr>
+											<% 
 								                }
-								                   // Check if status is "pending"
-									        %>
-	                                    </ul>
-	                                    </div>
-	                                </div>
-                            	</div>
-				             <% 
-				                }}else{
-				                	%>
-				                	<h4  class="text-danger">No Routes found ! Please refresh</h4>
-				                	<%
-				                }
-						             // Check if status is "pending"
-						        %>
+								            }
+								        %>
+								
+								        
+								                    </tbody>
+								                </table>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+                        		
+                        		
                             <!-- Collapsable Card Example -->
                     </div>
             	</div>

@@ -3,6 +3,7 @@ package dao;
 
 import model.Trip;
 import model.Consignment;
+import model.Driver;
 import model.Route;
 import model.Vehicle;
 import utils.DBConnection;
@@ -202,14 +203,9 @@ public class TripDao implements IDao<Trip> {
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleId(resultSet.getInt("vehicle_id"));
         trip.setVehicle(vehicle);
-        
         trip.setTripStartTime(resultSet.getString("TRIP_START_TIME"));
         trip.setTripEndTime(resultSet.getString("TRIP_END_TIME"));
-        
-        //trip.setTripStartTime(DateHandler.sqlTimeToStr(resultSet.getTimestamp("trip_Start_Time")));
-        //trip.setTripEndTime(DateHandler.sqlTimeToStr(resultSet.getTimestamp("trip_End_Time")));
         trip.setRemarks(resultSet.getString("remarks"));
-        //List<Consignment> consignments = consignmentDao.getConsignmentsByTripId(resultSet.getInt("trip_Id"));
         trip.setConsignments(null);
         return trip;
     }

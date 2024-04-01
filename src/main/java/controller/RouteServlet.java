@@ -1,5 +1,6 @@
 package controller;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -52,13 +53,17 @@ public class RouteServlet extends HttpServlet {
         } catch (ClassNotFoundException | 	SQLException e) {
             e.printStackTrace();
         }
+        request.setAttribute("routes", routes);
+        request.setAttribute("hubs", hs);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("route-view.jsp");
+        dispatcher.forward(request, response);
 	        // Set the filtered consignments as a request attribute
-        	HttpSession session = request.getSession();
-            session.setAttribute("hubs", hs);
-        	session.setAttribute("routes", routes);
+//        	HttpSession session = request.getSession();
+//            session.setAttribute("hubs", hs);
+//        	session.setAttribute("routes", routes);
 
 	        // Forward the request to the JSP page
-	        response.sendRedirect("route-view.jsp");
+	        //response.sendRedirect("route-view.jsp");
 	}
 
 	/**

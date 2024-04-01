@@ -1,34 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%
-response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
+<%
+	if(session.getAttribute("user") == null){
+		response.sendRedirect("login.jsp");	}
 %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@page import = "java.util.*" %>
-<%@page import="dao.HubDao" %>
-<%@page import="model.Hub" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.Route" %>
-<%@ page import="dao.HubDao" %>
-<%@ page import="utils.DBConnection" %>
+
  <%
 	LocalDate now = LocalDate.now();
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
     String formattedDate = now.format(formatter);
 %>
-<%
-	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+<%@page import="model.Route" %>
+<%@page import="model.Admin" %>
 
-%>
+<%@page import="model.Vehicle" %>
+<%@page import="model.Hub" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.List" %>
+<%@page import = "java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Fleet wise</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -37,29 +35,21 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <title>Fleet-Dashboard</title>
-
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-
-    
     <script>
         function toggleDropdown() {
           var dropdownContent = document.getElementById("myDropdown");
           dropdownContent.classList.toggle("show");
         }
-        </script>
-
-<link href="css/own.css" rel="stylesheet">
-<link rel="stylesheet" href="customcss/add-driver.css">
+     </script>
+	<link href="css/own.css" rel="stylesheet">
+	<link rel="stylesheet" href="customcss/add-driver.css">
 </head>
 
 <body id="page-top">
@@ -108,9 +98,9 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 </a>
                 <div  id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="consignment-view.jsp">View All Consignment</a>
+                        <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        
+						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
                     </div>
                 </div>
             </li>
@@ -126,9 +116,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="RouteServlet">View All Route</a>
-                        <a class="collapse-item" href="route-add">Add Route</a>
-                        						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
-                        
+                        <a class="collapse-item" href="route-add.jsp">Add Route</a>
                     </div>
                 </div>
             </li>
@@ -144,7 +132,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" href="vehicle-view.jsp">View Vehicle</a>
+						<a class="collapse-item" href="VehicleServlet">View Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
                     </div>
                 </div>
@@ -162,7 +150,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Driver Detail</h6>
-                        <a class="collapse-item" href="driver-view.jsp">View All Driver</a>
+                        <a class="collapse-item" href="DriverServlet">View All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
                     </div>
                 </div>
@@ -179,7 +167,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 <div id="collapseUtilities4" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="TripFetchServletAdmin">View All Trip</a>
+                        <a class="collapse-item" href="TripFetchServlet">View All Trip</a>
                     </div>
                 </div>
             </li>
@@ -195,6 +183,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 <div id="collapseUtilities3" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                    	<a class="collapse-item" href="AdminServlet">View Admin</a>
                         <a class="collapse-item" href="admin-add.jsp">Add Admin</a>
                     </div>
                 </div>
@@ -227,7 +216,8 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                     </button>
 
                     <!-- Topbar Search -->
-                    <h1 style="font-weight: 900" class="text-gray-700">CONSIGNMENT</h1>
+                    <h1 style="font-weight: 900" class="text-gray-700">ADMINS</h1>
+
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -305,85 +295,73 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                     <!-- Page Heading -->
 
                     <div class="text-center">
-                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 15rem;" src="img/consign.jpg" alt="...">
+                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 25rem;" src="img/admin.jpg" alt="...">
                      </div>
 
-                    
-                    <div class="container-fluid">
-
-                    <!-- Page Heading -->
-
                     <!-- Content Row -->
-                    <div class="row custom-div">
-
-                        <div class="col-lg-6 mb-4 custom-div-c">
-
-                            <!-- Illustrations -->
-    
-                            <div class="vehicle-form-con ">
-                                <div class="body-form vehicle-form">
-                      				<h4 style="margin-bottom:20px;" class="m-9 font-weight-bold ">create consignment</h4	>
-                                    <!-- Consignments Form -->
-                                    <form method="post" action="ConsignmentServlet" id="consignmentsForm">
-										<input class="d-none" style="display: hidden" name="type" value="create" />
-                                        <div class="form-flex">
-                                            <div class="form-group">
-                                                <label for="hubId" class="lp">Select Hub </label>
-                                                <select id="hubId" name="hubId">
-                                                	<% 
-											            DBConnection dbConnection = null;
-											            Connection connection = null;
-											            try {
-											                dbConnection = DBConnection.getDbConnnection(); // Get instance of DBConnection
-											                connection = dbConnection.getConnection(); // Get connection
-											                HubDao hubDao = new HubDao(dbConnection);
-											                List<Hub> hubs = hubDao.findAll(); // Assuming there's a method findAllRoutes() in your DAO
-											                for (Hub hub : hubs) {
-											        %>
-											            <option value="<%= hub.getHubId() %>"><%= hub.getHubName() %></option>
-											        <%
-											                }
-											            } catch (ClassNotFoundException | 	SQLException e) {
-											                e.printStackTrace();
-											            } 
-											        %>
-
-                                                </select>
-                                            </div>
-                        
-                                            <div class="form-group">
-                                                <label for="consignmentName" class="lp">Consignment Name</label>
-                                                <input type="text" id="consignmentName" name="consignmentName" required placeholder="Consignment Name">
-                                            </div>
-                                            
-                                        </div>
-                                       <div class="form-flex">
-                        
-                                        <div class="form-group">
-                                            <label for="address" class="lp">Address</label>
-                                            <input type="text" id="address" name="consignmentAddress" required placeholder="Address">
-                                        </div>
-                                       </div>
-                                        <button type="submit" class="bbp">Add Consignment</button>
-                                    </form>
-                                    <div id="message"></div>
-                                </div>
-                                </div>
-                                </div>
-							 </div>
-							  <script src="scripts.js"></script>
-
-
-
-                          
-
-                        </div>
                     
-
+					<a href="AdminServlet"><button style="margin-bottom:20px; width:100px" class="btn btn-warning " type="button"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Refresh
+                                </button></a>
                     <!-- Content Row -->
-
-
-            </div>
+						<div class="row ">
+                        		
+                        		<div id="London1d" class="tabcontent">
+                        									            <h6 class="font-weight-bold text-gray-700"> All Route</h6>
+                        		
+								    <div class="card shadow mb-4">
+								        
+								                  
+								        <div class="card-body">
+								            <div class="table-responsive">
+								                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								                    <thead>
+								                        <tr>
+								                            <th>Admin ID</th>
+								                            <th>Name </th>
+								                            <th>Gender</th>
+								                            <th>E-mail</th>
+								                            <th>Phone No.</th>
+								                            <th>Password</th>
+								                        
+								                        </tr>
+								                    </thead>
+								                    
+								         <% 
+								         List<Admin> admins= (List<Admin>) request.getAttribute("admins");
+								            if (admins != null && !admins.isEmpty()) {
+								                for (Admin a: admins) {
+								        %>
+								             
+											<tbody>
+								            <tr>
+								            <td><%= a.getAdminId() %></td>
+								            <td><%= a.getName() %></td>
+								            <td><%= a.getGender() %></td>
+								            <td><%= a.getEmailAddress() %></td>
+        								    <td><%= a.getPhoneNumber() %></td>
+        								    <td><%= a.getPassword() %></td>
+											
+								        </tr>
+											<% 
+								                }
+								            }
+								        %>
+								
+								        
+								                    </tbody>
+								                </table>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+                        		
+                        		
+                            <!-- Collapsable Card Example -->
+                    </div>
+            	</div>
             <!-- End of Main Content -->
 
             <!-- Footer -->

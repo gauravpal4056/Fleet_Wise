@@ -91,7 +91,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        <a class="collapse-item" href="consignment-delete.jsp">Edit Consignment </a> 
 						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
                     </div>
                 </div>
@@ -109,7 +108,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="RouteServlet.jsp">View All Route</a>
                         <a class="collapse-item" href="route-add.jsp">Add Route</a>
-                        <a class="collapse-item" href="route-delete.jsp">Edit Route</a>
                     </div>
                 </div>
             </li>
@@ -127,7 +125,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
 						<a class="collapse-item" href="VehicleServlet">View Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
-                        <a class="collapse-item" href="VehicleServlet">Edit Vehicle</a>
                     </div>
                 </div>
             </li>
@@ -146,7 +143,6 @@
                         <h6 class="collapse-header">Driver Detail</h6>
                         <a class="collapse-item" href="DriverServlet">View All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
-                        <a class="collapse-item" href="DriverServlet">Edit Driver</a>
                     </div>
                 </div>
             </li>
@@ -180,9 +176,18 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                     	<a class="collapse-item" href="AdminServlet">View Admin</a>
                         <a class="collapse-item" href="admin-add.jsp">Add Admin</a>
-                        <a class="collapse-item" href="AdminServlet">Edit Admin</a>
                     </div>
                 </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="AdminIssue" 
+                   >
+                    <span class="material-symbols-outlined">
+                       list
+                        </span>
+                    <span>Issues</span>
+                </a>
+                
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -287,16 +292,16 @@
                  
                                 <div class="container">
                                     <h2 style="text-align: left;" class="hp">Add Admin</h2>
-                                    <form id="registrationForm">
+                                    <form id="registrationForm" method="post" action="AdminServlet">
                                      <div class="form-flex">
                                         <div class="form-group">
                                             <label for="fullname" class="lp">Name</label>
                                             <input type="text" id="fullname" name="fullname" required placeholder="Name" class="li">
                                           </div>
                                           <div class="form-group">
-                                            <label for="username" placeholder="Full Name" class="lp">Username</label>
-                                            <input type="text" id="username" name="username" required placeholder="username">
-                                          </div>
+	                                        <label for="password " class="lp">Password</label>
+	                                        <input type="password" id="password" name="password" minlength="8" required placeholder="Password">
+	                                      </div>
                                      </div>
                                      
                                      <div class="form-flex">
@@ -306,16 +311,22 @@
                                           </div>
                                           <div class="form-group">
                                             <label for="phone" class="lp">Phone Number</label>
-                                            <input type="tel" id="phone" name="phone" required placeholder="Phone number">
+                                            <input type="number" id="phone" name="phone" required placeholder="Phone number">
                                           </div>
                                      </div>
-                                      <div class="form-group">
-                                        <label for="password " class="lp">Password</label>
-                                        <input type="password" id="password" name="password" minlength="8" required placeholder="Password">
-                                      </div>
-                                          
-                                      
-                                      <button type="submit" class="bbp">Add Driver</button>
+                                     <div class="form-flex">
+                                          <div class="form-group">
+                                            <label for="phone" class="lp">Select Gender</label>
+											<select class="" id="route" name="gender" required>
+		                                    	<option value="" disabled selected hidden>none</option>  
+                             					<option value="MALE"   >Male</option>   
+                             					<option value="FEMALE"   >Female</option>   
+                             				</select>                                       
+                             				</div>                                     
+                             			</div>
+                                     
+                                     
+                                      <button type="submit" class="bbp">Add Admin</button>
                                     </form>
                                     <div id="message"></div>
                                   </div>

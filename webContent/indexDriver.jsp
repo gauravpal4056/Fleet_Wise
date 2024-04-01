@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%
 	System.out.println(session.getAttribute("user"));
-	if(session.getAttribute("user")==null || session.getAttribute("user").equals("admin")){
+	if(session.getAttribute("user")==null || !session.getAttribute("user").equals("DRIVER")){
 		response.sendRedirect("login.jsp");	}
 %>
 <%@ page import="java.util.Date" %>
@@ -43,23 +43,17 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-    <style>
-    
-     
-    </style>
-
-
-    
-    <script>
-        function toggleDropdown() {
-          var dropdownContent = document.getElementById("myDropdown");
-          dropdownContent.classList.toggle("show");
-        }
-        </script>
-
-<link href="css/own.css" rel="stylesheet">
-
-
+   	<script>
+       function toggleDropdown() {
+         var dropdownContent = document.getElementById("myDropdown");
+         dropdownContent.classList.toggle("show");
+       }
+     </script>
+	<link href="css/own.css" rel="stylesheet">
+	<style>
+		
+		
+	</style>
 </head>
 
 <body id="page-top">
@@ -99,7 +93,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="driver-consignment.jsp" 
+                <a class="nav-link collapsed" href="DriverConsignmentServlet" 
                    >
                     <span class="material-symbols-outlined">
                         inventory_2
@@ -127,7 +121,7 @@
                 <a class="nav-link collapsed" href="TripFetchServlet" 
                    >
                     <span class="material-symbols-outlined">
-                       route
+                       list
                         </span>
                     <span>All Trips</span>
                 </a>
@@ -141,17 +135,17 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities10"
                     aria-expanded="true" aria-controls="collapseUtilities10">
                     <span class="material-symbols-outlined">
-                        route
+                        problem
                         </span>
                     <span>Issue</span>
                 </a>
                 <div id="collapseUtilities10" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
+                    <span class="material-symbols-outlined">
+                        
+                        </span>
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="driver-issue-view.jsp">view all issues</a>
-                        <a class="collapse-item" href="driver-issue-veh-create.jsp">raise vehicle issue</a>
-                        <a class="collapse-item" href="driver-issue-con-create.jsp">raise consignment issue</a>
-                        <!-- <a class="collapse-item" href="utilities-other.html">Other</a> -->
+                        <a class="collapse-item" href="IssueServlet">view all issues</a>                        <!-- <a class="collapse-item" href="utilities-other.html">Other</a> -->
                     </div>
                 </div>
             </li>
@@ -261,10 +255,10 @@
 
                     <!-- Page Heading -->
 
-                    <div class="text-center" style="background: url('https://as2.ftcdn.net/v2/jpg/01/38/84/09/1000_F_138840925_zhROJibslqOMFjpqxR0BCpDF6n5AiZmY.jpg';)"/>
-                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 100%; height:200px;" src=https://img.freepik.com/free-vector/hand-drawn-transportation-truck-with-delivery-man_23-2149161306.jpg?t=st=1711705190~exp=1711708790~hmac=1df90ba975ad656104cbabc8db6e9638844fc2e75b6e30fac036a2c0ebe6363f&w=996 alt="...">
+                    <div style=" height:200px;" class="text-center hero" />
+                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style=" height:200px;" src="https://img.freepik.com/free-vector/hand-drawn-flat-design-delivery-concept_23-2149157499.jpg?t=st=1711989360~exp=1711992960~hmac=da04b6d91132139e27abed4be9492e170fb248cf9dc598f2270ac665cf300a6c&w=996" alt="...">
                      </div>
-						<h4 style="font-weight: 600; margin-bottom: 30px;" class="font-bold">Today's Agenda</h4>
+						<h4 style="font-weight: 600; margin: 30px 0 30px 0;" class="font-bold">Today's Agenda</h4>
 
                     <!-- Content Row -->
 
@@ -272,7 +266,7 @@
                     <div class="row" style="height:100%; gap:20px;">
                      	<div class="card" style="width: 16rem; padding:10px;">
                      	<h5 class="card-title">My Profile</h5>
-						  <img style="height:150px;"  src="https://cdn.dribbble.com/users/1176657/screenshots/15468294/media/34af996ddff444391edab94abcf3c7f3.png" class="card-img-top" alt="...">
+						  <img style="height:150px;"  src="https://img.freepik.com/premium-vector/man-driving-car_24911-64602.jpg?w=740" class="card-img-top" alt="...">
 						  <div class="card-body">
 						    <%Driver d = (Driver) session.getAttribute("driver"); 
                             	if(d!=null)	{
@@ -288,7 +282,7 @@
 						</div>
 						<div class="card" style="width: 16rem;padding:10px;">
 							<h5 class="card-title">My Vehicle</h5>
-						  <img style="height:150px;" src="https://www.reshot.com/preview-assets/illustrations/RWHQGS4X96/truck-delivery-service-RWHQGS4X96-w600.jpg" class="card-img-top" alt="...">
+						  <img style="height:150px;" src="https://img.freepik.com/free-vector/truck-logistic-merchandise-delivery-cartoon_18591-52444.jpg?t=st=1711987386~exp=1711990986~hmac=9e001f3981a86a14c1e7c716a6935a67fc99322687641e471d005adc89fb92f1&w=1060" class="card-img-top" alt="...">
 
 						  <div class="card-body">
 						    <%Vehicle v = (Vehicle) session.getAttribute("vehicle"); 
@@ -307,14 +301,14 @@
 						<%Trip trip = (Trip)request.getAttribute("trip"); 
 							if(trip!=null){
 						%>
-						<div class="card" style="width: 18rem;padding:10px;">
+						<div class="card" style="width: 19rem;padding:10px; border: border-style: solid;border-color: green;">
 							<h5 class="card-title">Trip Assigned</h5>
-						  	<img style="height:150px;" src="https://img.freepik.com/premium-photo/free-shipping-concept-illustration_839035-551019.jpg?w=996" class="card-img-top" alt="...">						  <div class="card-body">
+						  	<img style="height:150px;" src="https://img.freepik.com/premium-vector/road-way-location-infographic-template-with-pin-pointer_153132-250.jpg?w=740" class="card-img-top" alt="...">						  <div class="card-body">
 						    <h5 style="font-weight: bolder;" class="card-title">Trip id : <%=trip.getTripId() %> </h5>
    						    <h6>Route : <%=trip.getRoute().getRouteName() %> </h6>
    						    <h6>Vehicle id : <%=v.getModel() %> </h6>
    					        <h6>Started on : <%=trip.getTripStartTime() %> </h6>
-						    <a href="driver-trip.jsp" class="btn btn-primary">Start Trip</a>
+						    <a href="TripServlet" class="btn btn-primary">Start Trip</a>
 						  </div>
 						</div>
 						<%} %>

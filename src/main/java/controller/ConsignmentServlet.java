@@ -51,7 +51,6 @@ public class ConsignmentServlet extends HttpServlet {
         	if(request.getParameter("route") != null) 
         	 {
         		int selectedRoute = Integer.parseInt(request.getParameter("route"));
-        		System.out.println(selectedRoute);
                 ConsignmentDao cDao = new ConsignmentDao(dbConnection);
                 consignments = cDao.getConsignmntsByRouteId(selectedRoute);
                 RouteDao rDao= new RouteDao(dbConnection);

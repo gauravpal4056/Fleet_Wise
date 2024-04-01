@@ -108,7 +108,6 @@
                         <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
                         <a class="collapse-item" href="consignment-delete.jsp">Edit Consignment </a> 
-						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
                     </div>
                 </div>
             </li>
@@ -123,9 +122,10 @@
                 <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="RouteServlet.jsp">View All Route</a>
+                        <a class="collapse-item" href="RouteServlet">View All Route</a>
                         <a class="collapse-item" href="route-add.jsp">Add Route</a>
-                        <a class="collapse-item" href="route-delete.jsp">Edit Route</a>
+                        						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
+                        
                     </div>
                 </div>
             </li>
@@ -143,7 +143,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
 						<a class="collapse-item" href="VehicleServlet">View Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
-                        <a class="collapse-item" href="VehicleServlet">Edit Vehicle</a>
                     </div>
                 </div>
             </li>
@@ -162,7 +161,6 @@
                         <h6 class="collapse-header">Driver Detail</h6>
                         <a class="collapse-item" href="DriverServlet">View All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
-                        <a class="collapse-item" href="DriverServlet">Edit Driver</a>
                     </div>
                 </div>
             </li>
@@ -199,6 +197,16 @@
                         <a class="collapse-item" href="AdminServlet">Edit Admin</a>
                     </div>
                 </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="AdminIssue" 
+                   >
+                    <span class="material-symbols-outlined">
+                       list
+                        </span>
+                    <span>Issues</span>
+                </a>
+                
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -291,7 +299,9 @@
                 <!-- End of Top bar -->
 
                 <!-- Begin Page Content -->
-
+				<div class="text-center">
+                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 25rem;" src="https://img.freepik.com/free-vector/delivery-guy-motor-scooter-wearing-mask_23-2148498576.jpg?t=st=1711992598~exp=1711996198~hmac=98bbb933a936414e694d89f50463c341ad05b24a5027161ce4dcd3780e7975a3&w=740" alt="...">
+                     </div>
 
                     <!-- Content Row -->
                  <div class="table-responsive">
@@ -303,7 +313,8 @@
                                                         <th>Model</th>
                                                         <th>Fuel type</th>
                                                         <th>Maintenance Due</th>
-														<th> </th>
+														<th> Status</th>
+														<th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -324,11 +335,12 @@
 								                       	  		<td class="text-danger" >Busy</td>
 								                       	  		<%} else  {%>
 								                       	  		<td class="text-success">Available	</td>
-								                       	  </tr>
+								                       	  	<%} %>
+																<td class="text-primary"><a href="UpdateVehicleServlet?vehicle_Id=<%= v.getVehicleId() %>" class="update_button">Update</a></td>								                       	  </tr>
 								                       	  		
 											        <%
 											            
-												           }			                
+												           			                
 									                		}}else {
 										            		%><h6 class="text-danger">No Vehicle found   !</h6><%
 											            }

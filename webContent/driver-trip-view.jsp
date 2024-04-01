@@ -105,7 +105,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="driver-consignment.jsp" 
+                <a class="nav-link collapsed" href="DriverConsignmentServlet" 
                    >
                     <span class="material-symbols-outlined">
                         inventory_2
@@ -133,7 +133,7 @@
                 <a class="nav-link collapsed" href="TripFetchServlet" 
                    >
                     <span class="material-symbols-outlined">
-                       route
+                       list
                         </span>
                     <span>All Trips</span>
                 </a>
@@ -147,19 +147,20 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities10"
                     aria-expanded="true" aria-controls="collapseUtilities10">
                     <span class="material-symbols-outlined">
-                        route
+                        problem
                         </span>
                     <span>Issue</span>
                 </a>
                 <div id="collapseUtilities10" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
+                    <span class="material-symbols-outlined">
+                        
+                        </span>
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="driver-issue-view.jsp">view all issues</a>
-                        <a class="collapse-item" href="driver-issue-veh-create.jsp">raise vehicle issue</a>
-                        <a class="collapse-item" href="driver-issue-con-create.jsp">raise consignment issue</a>
-                        <!-- <a class="collapse-item" href="utilities-other.html">Other</a> -->
+                        <a class="collapse-item" href="IssueServlet">view all issues</a>                        <!-- <a class="collapse-item" href="utilities-other.html">Other</a> -->
                     </div>
                 </div>
+                
             </li>
             <!-- Nav Item - Utilities Collapse Menu -->
        
@@ -173,47 +174,130 @@
           
 
         </ul>
-        <!-- End of Sidebar -->
+        <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Content Wrapper -->
-        <div class="table-responsive">
-                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Trip id</th>
-                                                        <th>Route Name</th>
-                                                        <th>Start Time</th>
-                                                        <th>End Time</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                
-											        <% 
-								                	List<Trip> trips = (List<Trip>) request.getAttribute("trips"); // Assuming there's a method findAllRoutes() in your DAO
-									                if (trips != null && trips.size()!=0){
-									                for (Trip t: trips) {
-											             // Check if status is "pending"
-											        %> 
-											        	<tr>
-							                                <td><%= t.getTripId()%></td>
-							                                <td><%= t.getRoute().getRouteName() %></td>
-							                                <td><%= t.getTripStartTime() %></td>
-							                                <td><%= t.getTripStartTime()%></td>
-							                                
-								                       	  	<td ><%=t.getRemarks() %>	</td>
-								                       	  </tr>
-								                       	  		
-											        <%
-											            
-												           			                
-									                		}}else {
-										            		%><h6 class="text-danger">No Trips found   !</h6><%
-											            }
-											        %>
-                                                </tbody>
-                                            </table>
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar my-2 ">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <h1 style="font-weight: 900" class="text-gray-700">ALL TRIPS</h1>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
                                         </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+
+
+                        <!-- Nav Item - Messages -->
+                        
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+	                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+	                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+	                                <img class="img-profile rounded-circle"
+	                                    src="img/undraw_profile.svg">
+	                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+                        
+                        <div style="justify-content: center; align-items: center" class=" d-flex ">
+                        	<a style="border-radius:20px;" class="dropdown-item text-gray-200 bg-gradient-danger" href="#" data-toggle="modal" data-target="#logoutModal">
+	                           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+	                           Logout
+	                       </a>
+                        </div>
+                        <li class="nav-item dropdown no-arrow mx-1">
+
+                            <!-- <span> Date | Time</span> -->
+                            <a class="nav-link btn dropdown-toggle " href="#" id="messagesDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <h6 style="font-weight: 700 ;margin:0; border-radius:20px; "class="bg-gray-200 text-gray-600 border border-dark py-2 px-3  " > <%= formattedDate  %></h6>
+                                <!-- Counter - Messages -->
+                                <!-- <span class="badge badge-danger badge-counter">7</span> -->
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="container-fluid">
+                    <div class="text-center">
+                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 25rem;" src="https://img.freepik.com/free-vector/man-looking-route-map-mobile-app_74855-10891.jpg?t=st=1711988764~exp=1711992364~hmac=df6fb180a04e70f0fa81c94c8e943d7a1fd8060319534ebbd0307aead77d2938&w=996" alt="...">
+                     </div>
+        			<div class="table-responsive">
+                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                             <thead class="thead-dark">
+                                                 <tr>
+                                                     <th>Trip id</th>
+                                                     <th>Route Name</th>
+                                                     <th>Start Time</th>
+                                                     <th>End Time</th>
+                                                     <th>Status</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                             
+								        <% 
+					                	List<Trip> trips = (List<Trip>) request.getAttribute("trips"); // Assuming there's a method findAllRoutes() in your DAO
+						                if (trips != null && trips.size()!=0){
+						                for (Trip t: trips) {
+								             // Check if status is "pending"
+								        %> 
+								        	<tr>
+				                                <td><%= t.getTripId()%></td>
+				                                <td><%= t.getRoute().getRouteName() %></td>
+				                                <td><%= t.getTripStartTime() %></td>
+				                                <td><%= t.getTripStartTime()%></td>
+				                                
+					                       	  	<td ><%=t.getRemarks() %>	</td>
+					                       	  </tr>
+					                       	  		
+								        <%
+								            
+									           			                
+						                		}}else {
+							            		%><h6 class="text-danger">No Trips found   !</h6><%
+								            }
+								        %>
+                                             </tbody>
+                                         </table>
+                                     </div>
         
             <!-- End of Main Content -->
 

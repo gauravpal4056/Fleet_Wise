@@ -1,142 +1,131 @@
 package dao;
 
-import model.Driver;
-import model.Issue;
-import utils.DBConnection;
-import utils.DateHandler;
-
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IssueDao implements IDao<Issue> {
+import model.Consignment;
+import model.Driver;
+import model.Issue;
+import model.Vehicle;
+import utils.DBConnection;
 
-	private DBConnection dbConnection;
-	
-	public IssueDao() {
-		super();
-	}
+public class IssueDao {
+    private DBConnection dbConnection;
 
-	public IssueDao(DBConnection dbConnection) {
-		super();
-		this.dbConnection = dbConnection;
-	}
-    @Override
-    public Issue create(Issue issue) throws SQLException {
-        String sql = "INSERT INTO Issues (Driver_ID, Vehicle_ID, Consignment_ID, Description, Raised_On, Resolved_On, Remarks, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		Connection connection=dbConnection.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            // Set values for parameters
-            statement.setInt(1, issue.getDriver().getDriverId());
-            statement.setInt(2, issue.getVehicle().getVehicleId());
-            statement.setInt(3, issue.getConsignment().getConsignmentId());
-            statement.setString(4, issue.getDescription());
-            statement.setTimestamp(5, DateHandler.javaToSqlTime(issue.getRaisedOn()));
-            statement.setTimestamp(6, DateHandler.javaToSqlTime(issue.getResolvedOn()));
-            statement.setString(7, issue.getRemarks());
-            statement.setString(8, issue.getStatus());
+    public IssueDao(DBConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
+
+    public void addVehicleIssue(Issue issue) throws SQLException, ClassNotFoundException {
+    	String query = "INSERT INTO Issues (Vehicle_ID,  Driver_ID, Description,  Remarks) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement statement = DBConnection.getDbConnnection().getConnection().prepareStatement(query)) {
+            statement.setInt(1, issue.getVehicle().getVehicleId());
+            statement.setInt(2, issue.getDriver().getDriverId());
+            statement.setString(3, issue.getDescription());
+            statement.setString(4, issue.getRemarks());
+
+            statement.executeUpdate();
             
-            // Execute the query
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating issue failed, no rows affected.");
-            }
-
-            // Get the generated keys
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    issue.setIssueId(generatedKeys.getInt(1));
-                } else {
-                    throw new SQLException("Creating issue failed, no ID obtained.");
-                }
-            }
         }
-        return issue;
     }
-
-    @Override
-    public boolean update(int id, Issue issue) throws SQLException {
-		Connection connection=dbConnection.getConnection();
-
-    	String sql = "UPDATE Issues SET Driver_ID=?, Vehicle_ID=?, Consignment_ID=?, Description=?, Raised_On=?, Resolved_On=?, Remarks=?, Status=? WHERE Issue_ID=?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            // Set values for parameters
+    
+    public void addConsignmentIssue(Issue issue) throws SQLException, ClassNotFoundException {
+    	String query = "INSERT INTO Issues (driver_ID,  Consignment_ID, Description,  Remarks) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement statement = DBConnection.getDbConnnection().getConnection().prepareStatement(query)) {
             statement.setInt(1, issue.getDriver().getDriverId());
-            statement.setInt(2, issue.getVehicle().getVehicleId());
-            statement.setInt(3, issue.getConsignment().getConsignmentId());
-            statement.setString(4, issue.getDescription());
-            statement.setTimestamp(5, DateHandler.javaToSqlTime(issue.getRaisedOn()));
-            statement.setTimestamp(6, DateHandler.javaToSqlTime(issue.getResolvedOn()));
-            statement.setString(7, issue.getRemarks());
-            statement.setString(8, issue.getStatus());
-            statement.setInt(9, id);
+        	statement.setInt(2, issue.getConsignment().getConsignmentId());
+            statement.setString(3, issue.getDescription());
+            statement.setString(4, issue.getRemarks());
 
-            // Execute the update
-            int affectedRows = statement.executeUpdate();
-            return affectedRows > 0;
+            statement.executeUpdate();
+            
         }
     }
 
-    @Override
-    public boolean delete(int id) throws SQLException {
-		Connection connection=dbConnection.getConnection();
-
-    	String sql = "DELETE FROM Issues WHERE Issue_ID=?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            int affectedRows = statement.executeUpdate();
-            return affectedRows > 0;
-        }
-    }
-
-    @Override
-    public Issue findOne(int id) throws SQLException {
-		Connection connection=dbConnection.getConnection();
-
-    	String sql = "SELECT * FROM Issues WHERE Issue_ID=?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return mapResultSetToIssue(resultSet);
-                }
-            }
-        }
-        return null; // Issue not found
-    }
-
-    @Override
-    public List<Issue> findAll() throws SQLException {
-		Connection connection=dbConnection.getConnection();
-
-    	List<Issue> issues = new ArrayList<>();
-        String sql = "SELECT * FROM Issues";
-        try (PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+    public List<Issue> getAllIssues() throws SQLException, ClassNotFoundException {
+        List<Issue> issues = new ArrayList<>();
+        String query = "SELECT * FROM Issues";
+        try (Statement statement = DBConnection.getDbConnnection().getConnection().createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
             while (resultSet.next()) {
-                Issue issue = mapResultSetToIssue(resultSet);
+                Issue issue = extractIssueFromResultSet(resultSet);
                 issues.add(issue);
             }
         }
         return issues;
     }
 
-    // Helper method to map ResultSet to Issue object
-    private Issue mapResultSetToIssue(ResultSet resultSet) throws SQLException {
+    public Issue getIssueById(int issueId) throws SQLException, ClassNotFoundException {
+        String query = "SELECT * FROM Issues WHERE Issue_ID = ?";
+        
+        try (PreparedStatement statement = DBConnection.getDbConnnection().getConnection().prepareStatement(query)) {
+            statement.setInt(1, issueId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return extractIssueFromResultSet(resultSet);
+                }
+            }
+        }
+        return null;
+    }
+    
+    public List<Issue> getAllIssueByDriver(int driverId) throws SQLException {
+        List<Issue> issues = new ArrayList<>();
+        String query = "SELECT * FROM Issues where driver_id=?";
+        
+        try {
+        	PreparedStatement statement = DBConnection.getDbConnnection().getConnection().prepareStatement(query);
+        	statement.setInt(1, driverId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Issue issue = extractIssueFromResultSet(resultSet);
+                issues.add(issue);
+            }
+        }
+        catch(Exception e){
+        	System.out.println(e);
+        }
+        return issues;
+    }
+    
+    public boolean solveIssue(int issueId) {
+    	boolean res= true;
+    	
+    	String query = "UPDATE Issues SET status='CLOSED' where issue_id= ? ";
+        try (PreparedStatement statement = DBConnection.getDbConnnection().getConnection().prepareStatement(query)) {
+            statement.setInt(1, issueId);
+
+            statement.executeUpdate();
+            
+        } catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return res;
+    }
+    
+    private Issue extractIssueFromResultSet(ResultSet resultSet) throws SQLException {
         Issue issue = new Issue();
-        DriverDao driverDao = new DriverDao(dbConnection);
-        VehicleDao vehicleDao = new VehicleDao(dbConnection);
-        ConsignmentDao consignmentDao = new ConsignmentDao(dbConnection);
         issue.setIssueId(resultSet.getInt("Issue_ID"));
-        // Assuming you have appropriate DAOs to fetch related entities (Driver, Vehicle, Consignment)
-        issue.setDriver(driverDao.findOne(resultSet.getInt("Driver_ID")));
-        issue.setVehicle(vehicleDao.findOne(resultSet.getInt("Vehicle_ID")));
-        issue.setConsignment(consignmentDao .findOne(resultSet.getInt("Consignment_ID")));
         issue.setDescription(resultSet.getString("Description"));
-        issue.setRaisedOn(DateHandler.sqlTimeToJava(resultSet.getTimestamp("Raised_On")));
-        issue.setResolvedOn(DateHandler.sqlTimeToJava(resultSet.getTimestamp("Resolved_On")));
+        issue.setRaisedOn(resultSet.getTimestamp("Raised_On"));
+        issue.setResolvedOn(resultSet.getTimestamp("Resolved_On"));
         issue.setRemarks(resultSet.getString("Remarks"));
         issue.setStatus(resultSet.getString("Status"));
+        Consignment c  =null;
+    	ConsignmentDao cDao = new ConsignmentDao(dbConnection);
+        c = cDao.findOne(resultSet.getInt("Consignment_ID"));
+        issue.setConsignment(c);
+
+        DriverDao dDao = new DriverDao(dbConnection); 
+        Driver d = dDao.findOne(resultSet.getInt("Driver_ID"));
+        issue.setDriver(d);
+        System.out.println(issue);
         return issue;
     }
 }

@@ -40,10 +40,7 @@ public class UpdateRouteServlet extends HttpServlet {
     		Class.forName("oracle.jdbc.driver.OracleDriver");
             DBConnection dbConnection = DBConnection.getDbConnnection();
             RouteDao RouteDao = new RouteDao(dbConnection);
-            Route Routes = RouteDao.findOne(RouteId);
-            
-            System.out.println(Routes.getRouteName());
-            
+            Route Routes = RouteDao.findOne(RouteId);            
             request.setAttribute("Routes", Routes);
             RequestDispatcher dispatcher = request.getRequestDispatcher("route-update.jsp");
             dispatcher.forward(request, response);
@@ -104,11 +101,15 @@ public class UpdateRouteServlet extends HttpServlet {
 	            if (updated) {
 	                // Update successful
 	                // Forward the request to the JSP page to display success message or perform further actions
-	                request.setAttribute("updated", updated);
 	                System.out.println("Route record updated successfully.");
+	                RequestDispatcher dispatcher = request.getRequestDispatcher("RouteServlet");
+	                dispatcher.forward(request, response);
 	            } else {
 	                // Update failed
 	                System.out.println("Failed to update Route record.");
+	                request.setAttribute("message", "while updating route");
+	                RequestDispatcher dispatcher = request.getRequestDispatcher("404_1.jsp");
+	                dispatcher.forward(request, response);
 	            }
 	            response.sendRedirect("route-view.jsp");
 	        } catch (Exception e) {
@@ -117,6 +118,5 @@ public class UpdateRouteServlet extends HttpServlet {
 	    }
 
 	    // After handling the request, redirect to doGet for further processing
-	    doGet(request, response);
 	}
 }

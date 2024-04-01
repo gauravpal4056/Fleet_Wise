@@ -33,7 +33,6 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         String idType = request.getParameter("type").toUpperCase();
         HttpSession session = request.getSession();
-        System.out.println(idType);
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
 	    	DBConnection dbConnection ;
@@ -43,12 +42,11 @@ public class LoginServlet extends HttpServlet {
 	    		Admin res = aDao.findByNamePassword(username, password);
 	    		if (res!=null) {
 	            	session.setAttribute("user", idType);
-	            	session.setAttribute("userId", res.getAdminId());
 	                response.sendRedirect("index.jsp");
 	            } else {
 	            	System.out.println("NO ADMINN FOUND");
 	            	request.setAttribute("message", "No Admin Found !");
-	            	RequestDispatcher rd = request.getRequestDispatcher("public/404_1.jsp");
+	            	RequestDispatcher rd = request.getRequestDispatcher("404_1.jsp");
 	            	rd.forward(request, response);
 	            }
 	    	}else {
@@ -62,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 	            } else {
 	            	System.out.println("NO DRVIER FOUND");
 	            	request.setAttribute("message", "No Driver Found !");
-	            	RequestDispatcher rd = request.getRequestDispatcher("public/404_1.jsp");
+	            	RequestDispatcher rd = request.getRequestDispatcher("404_1.jsp");
 	            	rd.forward(request, response);
 	            }
 	    	}

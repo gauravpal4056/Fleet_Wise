@@ -412,7 +412,7 @@ height:100%;}
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" 
+                <a class="nav-link collapsed" href="DriverConsignmentServlet" 
                    >
                     <span class="material-symbols-outlined">
                         inventory_2
@@ -440,7 +440,7 @@ height:100%;}
                 <a class="nav-link collapsed" href="TripFetchServlet" 
                    >
                     <span class="material-symbols-outlined">
-                       route
+                       list
                         </span>
                     <span>All Trips</span>
                 </a>
@@ -451,17 +451,14 @@ height:100%;}
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities10"
                     aria-expanded="true" aria-controls="collapseUtilities10">
                     <span class="material-symbols-outlined">
-                        route
+                        problem
                         </span>
                     <span>Issue</span>
                 </a>
                 <div id="collapseUtilities10" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="utilities-color.html">view all issues</a>
-                        <a class="collapse-item" href="add-route.html">raise vehicle issue</a>
-                        <a class="collapse-item" href="utilities-animation.html">raise consignment issue</a>
-                        <!-- <a class="collapse-item" href="utilities-other.html">Other</a> -->
+                        <a class="collapse-item" href="IssueServlet">view all issues</a>
                     </div>
                 </div>
             </li>
@@ -641,6 +638,9 @@ height:100%;}
                                 <th>Hub-Address</th>
                                 <th>Date</th>
                               </tr>
+                              <%List<Hub> currNext  = (List<Hub>) request.getAttribute("currNext");
+                            	System.out.println(currNext);
+                            %>
                              <%List<Consignment> cs =(List<Consignment>) request.getAttribute("currCon");
                              	if(cs!=null && cs.size()>0){
                              		for(Consignment c: cs){
@@ -649,7 +649,7 @@ height:100%;}
                              <tr>
                                 <td><%= c.getConsignmentId()%></td>
                                 <td><%= c.getConsignmentName() %></td>
-                                <td><%= c.getHub().getHubName() %></td>
+                                <td><%= currNext.get(1).getHubName() %></td>
                                 <td><%= DateHandler.javaToStr(c.getConsignmentDate()) %></td>
                             </tr>
                               <%}}else{ %>
@@ -658,9 +658,7 @@ height:100%;}
                             </table>
 							</div>
                             </div>
-                            <%List<Hub> currNext  = (List<Hub>) request.getAttribute("currNext");
-                            	System.out.println(currNext);
-                            %>
+                            
                          <div  class="t-f-c">
                             <div style="padding:10px;" class="footer-left-timeline bg-gray-900 rounded text-gray-400 border border-gray-900">
                               <h5 class="text-gray-600">Current Hub</h3>

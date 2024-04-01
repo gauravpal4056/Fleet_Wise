@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    
+    <%
+	response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
+	%>
+		
 <%
 	if(session.getAttribute("user")!=null && session.getAttribute("user").equals("driver") ){
-		response.sendRedirect("public/indexDriver.jsp");	}
+		response.sendRedirect("DriverDashboardServlet");	}
 	else if(session.getAttribute("user")!=null && session.getAttribute("user").equals("admin")){
-		response.sendRedirect("DriverDashboardServlet");
+		response.sendRedirect("index.jsp");
 	}
 %>
 <!DOCTYPE html>
@@ -17,8 +20,8 @@
 	</head>
 	
 	<body>
-		<div class="App h-screen flex  w-full justify-center items-center ">
-	      <section class="bg-gray-50  w-full">
+		<div class="App h-screen flex-col lg:flex-row flex  w-full justify-center items-center ">
+	      <section class="bg-gray-50  w-screen">
 	        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
 	            <a href="#" class="absolute top-0 left-0 m-3 flex items-center mb-6 text-2xl font-semibold text-gray-900 ">
 	                <img class="w-8 h-8 mr-2 " src="https://t4.ftcdn.net/jpg/03/69/79/91/360_F_369799193_D7bhKPUKNN3FFvrmp3PqtS6pi1NCGQmJ.jpg" alt="logo" />

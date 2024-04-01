@@ -6,48 +6,50 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Issue;
+import model.Consignment;
 import utils.DBConnection;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
-import dao.IssueDao;
+import dao.ConsignmentDao;
 
 /**
- * Servlet implementation class issues
+ * Servlet implementation class DriverConsignmentServlet
  */
-public class issues extends HttpServlet {
+public class DriverConsignmentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public issues() {
+    public DriverConsignmentServlet() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// TODO Auto-generated method stub
+		DBConnection dbConnection;
 		try {
-			
-			DBConnection dbConnection = DBConnection.getDbConnnection();
-			IssueDao iDao = new IssueDao(dbConnection);
+			dbConnection = DBConnection.getDbConnnection();
 			HttpSession session = request.getSession();
-	        int driverId = (int) session.getAttribute("userId");
-			List<Issue> is = iDao.getAllIssueByDriver(driverId);
-			request.setAttribute("issues", is);
-			request.getRequestDispatcher("driver-issue-view.jsp").forward(request, response);
-					
+	        int driverId =  (int) session.getAttribute("userId");
+			System.out.println(driverId);
+
+	        ConsignmentDao cDao = new ConsignmentDao(dbConnection);
+	        List<Consignment> ls = cDao.getConsignmentsByDriverId(driverId);
+	        request.setAttribute("consignments", ls);
+	        System.out.println(ls);
+	        request.getRequestDispatcher("driver-consignment-view.jsp").forward(request, response);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**

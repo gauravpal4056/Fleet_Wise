@@ -4,6 +4,9 @@
 	if(session.getAttribute("user") == null){
 		response.sendRedirect("login.jsp");	}
 %>
+<%
+response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
+%>
 
 
 
@@ -259,7 +262,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        <a class="collapse-item" href="consignment-delete.jsp">Edit Consignment </a> 
 						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
                     </div>
                 </div>
@@ -277,7 +279,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="RouteServlet">View All Route</a>
                         <a class="collapse-item" href="route-add.jsp">Add Route</a>
-                        <a class="collapse-item" href="route-delete.jsp">Edit Route</a>
                     </div>
                 </div>
             </li>
@@ -295,7 +296,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
 						<a class="collapse-item" href="VehicleServlet">View Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
-                        <a class="collapse-item" href="VehicleServlet">Edit Vehicle</a>
                     </div>
                 </div>
             </li>
@@ -314,7 +314,6 @@
                         <h6 class="collapse-header">Driver Detail</h6>
                         <a class="collapse-item" href="DriverServlet">View All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
-                        <a class="collapse-item" href="DriverServlet">Edit Driver</a>
                     </div>
                 </div>
             </li>
@@ -348,9 +347,18 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                     	<a class="collapse-item" href="AdminServlet">View Admin</a>
                         <a class="collapse-item" href="admin-add.jsp">Add Admin</a>
-                        <a class="collapse-item" href="AdminServlet">Edit Admin</a>
                     </div>
                 </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="AdminIssue" 
+                   >
+                    <span class="material-symbols-outlined">
+                       list
+                        </span>
+                    <span>Issues</span>
+                </a>
+                
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -499,7 +507,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>S. No</th>
+                            <th>Cid</th>
                             <th>Name</th>
                             <th>HUB</th>
                             <th>DATE</th>
@@ -541,7 +549,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>S. No</th>
+                            <th>Cid</th>
                             <th>NAME</th>
                             <th>HUB</th>
                             <th>DATE</th>
@@ -585,7 +593,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>NUMBER</th>
+                            <th>Cid</th>
                             <th>NAME</th>
                             <th>HUB</th>
                             <th>DATE</th>

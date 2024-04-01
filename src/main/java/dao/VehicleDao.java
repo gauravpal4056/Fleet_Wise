@@ -167,24 +167,30 @@ public class VehicleDao implements IDao<Vehicle> {
     }
 
     @Override
-    public boolean update(int id, Vehicle vehicle) throws SQLException {
-        String query = "UPDATE vehicles SET driver_id=?, registration_no=?, registration_date=?, model=?, fuel_type=?, last_maintained=?, threshold_maintenance_months=?, next_maintenance=?, maintenance_due=?, status=? WHERE vehicle_id=?";
-        try (Connection connection=dbConnection.getConnection();
-        		PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, vehicle.getDriverId());
-            statement.setString(2, vehicle.getRegistrationNo());
-            statement.setString(3, vehicle.getRegistrationDate());
-            statement.setString(4, vehicle.getModel());
-            statement.setString(5, vehicle.getFuelType());
-            statement.setDate(6, DateHandler.javaToSqlDate(vehicle.getLastMaintained()));
-            statement.setInt(7, vehicle.getThresholdMaintenanceMonths());
-            statement.setDate(8, DateHandler.javaToSqlDate(vehicle.getNextMaintenance()));
-            statement.setString(9, vehicle.getMaintenanceDue());
-            statement.setString(10, vehicle.getStatus());
-            statement.setInt(11, id);
-            int affectedRows = statement.executeUpdate();
-            return affectedRows > 0;
-        }
+	public boolean update(int vehicleId, Vehicle vehicle) {
+	    	
+	    	boolean updated = false;
+	        PreparedStatement statement = null;
+	        try{
+	        	Connection connection=dbConnection.getConnection();
+	    		String sql = "UPDATE Vehicles SET Registration_No = ?, Fuel_Type = ?, Model = ?, Threshold_Maintenance_Months = ? WHERE Vehicle_ID = ?";
+	    		statement = connection.prepareStatement(sql);
+	            statement.setString(1, vehicle.getRegistrationNo());
+	            statement.setString(2, vehicle.getFuelType());
+	            statement.setString(3, vehicle.getModel());
+	            statement.setInt(4, vehicle.getThresholdMaintenanceMonths());
+	            statement.setInt(5, vehicleId);
+	            
+	            int rowsAffected = statement.executeUpdate();
+	
+	            // If at least one row was updated, set updated flag to true
+	            if (rowsAffected > 0) {
+	                updated = true;
+	            }
+	        }catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return updated;
     }
     
     public boolean setVehicleStatus(String status, int id) throws SQLException {

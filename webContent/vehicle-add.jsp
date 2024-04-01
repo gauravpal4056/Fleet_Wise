@@ -108,7 +108,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        <a class="collapse-item" href="ConsignmentServlet">Delete Consignment </a> 
                     </div>
                 </div>
             </li>
@@ -125,7 +124,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="RouteServlet">View All Route</a>
                         <a class="collapse-item" href="route-add.jsp">Add Route</a>
-                        <a class="collapse-item" href="RouteServlet">Delete Route</a>
 						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
                         
                     </div>
@@ -145,7 +143,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
 						<a class="collapse-item" href="VehicleServlet">View Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
-                        <a class="collapse-item" href="VehicleServlet">Remove Vehicle</a>
                     </div>
                 </div>
             </li>
@@ -164,7 +161,6 @@
                         <h6 class="collapse-header">Driver Detail</h6>
                         <a class="collapse-item" href="DriverServlet">View All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
-                        <a class="collapse-item" href="DriverServlet">delete Driver</a>
                     </div>
                 </div>
             </li>
@@ -198,9 +194,18 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="AdminServlet">Add Admin</a>                 
                         <a class="collapse-item" href="admin-add.jsp">Add Admin</a>
-                        <a class="collapse-item" href="AdminServlet">Delete Admin</a>
                     </div>
                 </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="AdminIssue" 
+                   >
+                    <span class="material-symbols-outlined">
+                       list
+                        </span>
+                    <span>Issues</span>
+                </a>
+                
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -220,7 +225,7 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <h1 style="font-weight: 900" class="text-gray-700">DASHBOARD</h1>
+                    <h1 style="font-weight: 900" class="text-gray-700">VEHICLE</h1>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">

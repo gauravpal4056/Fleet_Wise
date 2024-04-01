@@ -36,7 +36,6 @@ public class DriverServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		try {
             // Get driver data from the database
-        	Class.forName("oracle.jdbc.driver.OracleDriver");
             DBConnection dbConnection = DBConnection.getDbConnnection();
             DriverDao driverDao = new DriverDao(dbConnection);
             List<Driver> drivers = driverDao.findAll();

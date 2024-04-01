@@ -91,7 +91,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        <a class="collapse-item" href="consignment-delete.jsp">Edit Consignment </a> 
 						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
                     </div>
                 </div>
@@ -109,7 +108,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="RouteServlet.jsp">View All Route</a>
                         <a class="collapse-item" href="route-add.jsp">Add Route</a>
-                        <a class="collapse-item" href="route-delete.jsp">Edit Route</a>
                     </div>
                 </div>
             </li>
@@ -127,7 +125,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
 						<a class="collapse-item" href="VehicleServlet">View Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
-                        <a class="collapse-item" href="VehicleServlet">Edit Vehicle</a>
                     </div>
                 </div>
             </li>
@@ -146,7 +143,6 @@
                         <h6 class="collapse-header">Driver Detail</h6>
                         <a class="collapse-item" href="DriverServlet">View All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
-                        <a class="collapse-item" href="DriverServlet">Edit Driver</a>
                     </div>
                 </div>
             </li>
@@ -183,6 +179,16 @@
                         <a class="collapse-item" href="AdminServlet">Edit Admin</a>
                     </div>
                 </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="AdminIssue" 
+                   >
+                    <span class="material-symbols-outlined">
+                       list
+                        </span>
+                    <span>Issues</span>
+                </a>
+                
             </li>
         </ul>
         <!-- End of Sidebar -->

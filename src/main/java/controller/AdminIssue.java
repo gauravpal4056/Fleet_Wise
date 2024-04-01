@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Issue;
+import services.AdminService;
 import utils.DBConnection;
 
 import java.io.IOException;
@@ -16,46 +17,53 @@ import java.util.List;
 import dao.IssueDao;
 
 /**
- * Servlet implementation class issues
+ * Servlet implementation class AdminIssue
  */
-public class issues extends HttpServlet {
+public class AdminIssue extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public issues() {
+    public AdminIssue() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// TODO Auto-generated method stub
 		try {
-			
 			DBConnection dbConnection = DBConnection.getDbConnnection();
 			IssueDao iDao = new IssueDao(dbConnection);
-			HttpSession session = request.getSession();
-	        int driverId = (int) session.getAttribute("userId");
-			List<Issue> is = iDao.getAllIssueByDriver(driverId);
+			List<Issue> is = iDao.getAllIssues();
 			request.setAttribute("issues", is);
-			request.getRequestDispatcher("driver-issue-view.jsp").forward(request, response);
+			request.getRequestDispatcher("issues-consignment-view.jsp").forward(request, response);
 					
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-	}
+		}	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+
+		try {
+			DBConnection dbConnection = DBConnection.getDbConnnection();
+			int selectedIssue = Integer.parseInt(request.getParameter("issue"));
+	        AdminService as = new AdminService(dbConnection);
+	        as.solveIssue(selectedIssue);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+        
 	}
 
 }

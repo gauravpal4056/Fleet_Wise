@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-
+<%
+response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
+%>
 <%
 	if(session.getAttribute("user") == null){
 		response.sendRedirect("login.jsp");	}
-	else if(session.getAttribute("user").equals("driver"))
+	else if(session.getAttribute("user")=="driver")
 		response.sendRedirect("indexDriver.jsp");
 
 %>
@@ -16,11 +18,28 @@
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
     String formattedDate = now.format(formatter);
 %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@page import = "java.util.*" %>
+<%@page import="dao.HubDao" %>
+<%@page import="model.Hub" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Route" %>
+<%@ page import="dao.VehicleDao" %>
+<%@ page import="dao.ConsignmentDao" %>
+
+<%@ page import="dao.RouteDao" %>
+<%@ page import="dao.HubDao" %>
+<%@ page import="dao.DriverDao" %>
+
+<%@ page import="utils.DBConnection" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Fleet Wise</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -40,9 +59,6 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-
-    
     <script>
         function toggleDropdown() {
           var dropdownContent = document.getElementById("myDropdown");
@@ -103,7 +119,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        <a class="collapse-item" href="ConsignmentServlet">Delete Consignment </a> 
                     </div>
                 </div>
             </li>
@@ -120,7 +135,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="RouteServlet">View All Route</a>
                         <a class="collapse-item" href="route-add.jsp">Add Route</a>
-                        <a class="collapse-item" href="RouteServlet">Delete Route</a>
 						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
                         
                     </div>
@@ -138,9 +152,8 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" href="VehicleServlet">View Vehicle</a>
+						<a class="collapse-item" href="VehicleServlet">All Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
-                        <a class="collapse-item" href="VehicleServlet">Remove Vehicle</a>
                     </div>
                 </div>
             </li>
@@ -157,9 +170,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Driver Detail</h6>
-                        <a class="collapse-item" href="DriverServlet">View All Driver</a>
+                        <a class="collapse-item" href="DriverServlet">All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
-                        <a class="collapse-item" href="DriverServlet">delete Driver</a>
                     </div>
                 </div>
             </li>
@@ -175,7 +187,7 @@
                 <div id="collapseUtilities4" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="TripFetchServlet">View All Trip</a>
+                        <a class="collapse-item" href="TripFetchServletAdmin">View All Trip</a>
                     </div>
                 </div>
             </li>
@@ -191,11 +203,20 @@
                 <div id="collapseUtilities3" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="AdminServlet">Add Admin</a>                 
+                        <a class="collapse-item" href="AdminServlet">View Admin</a>                 
                         <a class="collapse-item" href="admin-add.jsp">Add Admin</a>
-                        <a class="collapse-item" href="AdminServlet">Delete Admin</a>
                     </div>
                 </div>
+            </li>
+           <li class="nav-item">
+                <a class="nav-link collapsed" href="AdminIssue" 
+                   >
+                    <span class="material-symbols-outlined">
+                       list
+                        </span>
+                    <span>Issues</span>
+                </a>
+                
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -282,18 +303,34 @@
                             </a>
                         </li>
                     </ul>
-                    
-
                 </nav>
                 <!-- End of Top bar -->
+				<% 
+		            DBConnection dbConnection = null;
+		            Connection connection = null;
+		            try {
+		                dbConnection = DBConnection.getDbConnnection(); // Get instance of DBConnection
+		                connection = dbConnection.getConnection(); // Get connection
+		                VehicleDao vDao = new VehicleDao(dbConnection);
+		                DriverDao dDao = new DriverDao(dbConnection);
+		                HubDao hDao = new HubDao(dbConnection);
+		                RouteDao rDao = new RouteDao(dbConnection);
+		                ConsignmentDao cDao = new ConsignmentDao(dbConnection);
 
+		                int availableVehicles = vDao.findAll().size();
+		                int availableHubs = hDao.findAll().size();
+		                int availableDrivers = dDao.findAll().size();
+
+		                int availableRoutes = rDao.findAll().size();
+		                int availableConsignments = cDao.findAll().size();
+		        %> 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+ 
                     <!-- Page Heading -->
 
                     <div class="text-center">
-                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 25rem;" src="img/admin.jpg" alt="...">
+                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 35rem;" src="https://img.freepik.com/free-vector/happy-freelancer-with-computer-home-young-man-sitting-armchair-using-laptop-chatting-online-smiling-vector-illustration-distance-work-online-learning-freelance_74855-8401.jpg?t=st=1711960970~exp=1711964570~hmac=e46a4139347a7911100481c3d5360e60baf25c197ab13ef0cda6d31a36faf403&w=1060" alt="...">
                      </div>
 
                     <!-- Content Row -->
@@ -307,7 +344,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Available Vehicle</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">4</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=availableVehicles %></div>
                                         </div>
                                         <div class="col-auto">
                                             <span class="material-symbols-outlined fa-2x text-gray-300">
@@ -327,10 +364,10 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Available Drivers </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">5,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=availableDrivers %></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                            <i class="fas fa-boy fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -338,33 +375,7 @@
                         </div>
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Routes Covered
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         <!-- Pending Requests Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -374,16 +385,48 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                              Hubs reached</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=availableHubs %></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                            <i class="fas fa-home fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-dark shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                             Routes Covered</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=availableRoutes %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-road fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                             Consignment collected</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <%=availableConsignments %> </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-box fa-boxes-stacked fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     <!-- Content Row -->
 
@@ -403,7 +446,11 @@
 
         </div>
         <!-- End of Content Wrapper -->
-
+			<%
+		            } catch (ClassNotFoundException | 	SQLException e) {
+		                e.printStackTrace();
+		            } 
+		        %>
     </div>
     <!-- End of Page Wrapper -->
 

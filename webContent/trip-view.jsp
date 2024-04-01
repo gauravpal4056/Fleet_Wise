@@ -1,34 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%
+<%
 response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
 %>
-<%@ page import="java.util.Date" %>
+<%
+	if(session.getAttribute("user") == null){
+		response.sendRedirect("login.jsp");	}
+	else if(session.getAttribute("user")=="driver")
+		response.sendRedirect("indexDriver.jsp");
+
+%>
+<%@ page import="java.util.*" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@page import = "java.util.*" %>
-<%@page import="dao.HubDao" %>
-<%@page import="model.Hub" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.Route" %>
-<%@ page import="dao.HubDao" %>
-<%@ page import="utils.DBConnection" %>
  <%
 	LocalDate now = LocalDate.now();
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
     String formattedDate = now.format(formatter);
 %>
-<%
-	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
-%>
+<%@page import="model.Trip" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Fleet Wise</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -59,7 +56,8 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
         </script>
 
 <link href="css/own.css" rel="stylesheet">
-<link rel="stylesheet" href="customcss/add-driver.css">
+
+
 </head>
 
 <body id="page-top">
@@ -108,9 +106,8 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 </a>
                 <div  id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="consignment-view.jsp">View All Consignment</a>
+                        <a class="collapse-item" href="ConsignmentServlet">View All Consignment</a>
                         <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        
                     </div>
                 </div>
             </li>
@@ -126,8 +123,8 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="RouteServlet">View All Route</a>
-                        <a class="collapse-item" href="route-add">Add Route</a>
-                        						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
+                        <a class="collapse-item" href="route-add.jsp">Add Route</a>
+						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
                         
                     </div>
                 </div>
@@ -144,7 +141,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" href="vehicle-view.jsp">View Vehicle</a>
+						<a class="collapse-item" href="VehicleServlet">All Vehicle</a>
                         <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
                     </div>
                 </div>
@@ -162,7 +159,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Driver Detail</h6>
-                        <a class="collapse-item" href="driver-view.jsp">View All Driver</a>
+                        <a class="collapse-item" href="DriverServlet">All Driver</a>
                         <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
                     </div>
                 </div>
@@ -195,6 +192,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 <div id="collapseUtilities3" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="AdminServlet">View Admin</a>                 
                         <a class="collapse-item" href="admin-add.jsp">Add Admin</a>
                     </div>
                 </div>
@@ -227,7 +225,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                     </button>
 
                     <!-- Topbar Search -->
-                    <h1 style="font-weight: 900" class="text-gray-700">CONSIGNMENT</h1>
+                    <h1 style="font-weight: 900" class="text-gray-700">TRIPS</h1>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -294,96 +292,57 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                             </a>
                         </li>
                     </ul>
-                    
-
                 </nav>
                 <!-- End of Top bar -->
-
+				
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
-
-                    <div class="text-center">
-                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 15rem;" src="img/consign.jpg" alt="...">
-                     </div>
-
-                    
-                    <div class="container-fluid">
-
-                    <!-- Page Heading -->
-
-                    <!-- Content Row -->
-                    <div class="row custom-div">
-
-                        <div class="col-lg-6 mb-4 custom-div-c">
-
-                            <!-- Illustrations -->
-    
-                            <div class="vehicle-form-con ">
-                                <div class="body-form vehicle-form">
-                      				<h4 style="margin-bottom:20px;" class="m-9 font-weight-bold ">create consignment</h4	>
-                                    <!-- Consignments Form -->
-                                    <form method="post" action="ConsignmentServlet" id="consignmentsForm">
-										<input class="d-none" style="display: hidden" name="type" value="create" />
-                                        <div class="form-flex">
-                                            <div class="form-group">
-                                                <label for="hubId" class="lp">Select Hub </label>
-                                                <select id="hubId" name="hubId">
-                                                	<% 
-											            DBConnection dbConnection = null;
-											            Connection connection = null;
-											            try {
-											                dbConnection = DBConnection.getDbConnnection(); // Get instance of DBConnection
-											                connection = dbConnection.getConnection(); // Get connection
-											                HubDao hubDao = new HubDao(dbConnection);
-											                List<Hub> hubs = hubDao.findAll(); // Assuming there's a method findAllRoutes() in your DAO
-											                for (Hub hub : hubs) {
-											        %>
-											            <option value="<%= hub.getHubId() %>"><%= hub.getHubName() %></option>
+               		<div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Trip id</th>
+                                                        <th>Route Name</th>
+														<th>Vehicle id</th>
+                                                        <th>Start Time</th>
+                                                        <th>Updated Time</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                
+											        <% 
+								                	List<Trip> trips = (List<Trip>) request.getAttribute("trips"); // Assuming there's a method findAllRoutes() in your DAO
+									                if (trips != null && trips.size()!=0){
+									                for (Trip t: trips) {
+											             // Check if status is "pending"
+											        %> 
+											        	<tr>
+							                                <td><%= t.getTripId()%></td>
+							                                <td><%= t.getRoute().getRouteName() %></td>
+							                                <td><%=t.getVehicle().getVehicleId()%>							                                
+							                                <td><%= t.getTripStartTime() %></td>
+							                                <td><%= t.getTripStartTime()%></td>
+							                                <%if(t.getRemarks()!=null) {%>								                       	  	
+								                       	  		<td class="text-success" ><%=t.getRemarks() %>	</td>
+															<%}else{ %>
+																	<td class="text-warning">Not Started</td>						                       	  	
+																							                       	  	
+															
+								                       	  </tr>
+								                       	  		
 											        <%
-											                }
-											            } catch (ClassNotFoundException | 	SQLException e) {
-											                e.printStackTrace();
-											            } 
+											            
+												           			                
+									                		}}}else {
+										            		%><h6 class="text-danger">No Trips found   !</h6><%
+											            }
 											        %>
-
-                                                </select>
-                                            </div>
-                        
-                                            <div class="form-group">
-                                                <label for="consignmentName" class="lp">Consignment Name</label>
-                                                <input type="text" id="consignmentName" name="consignmentName" required placeholder="Consignment Name">
-                                            </div>
-                                            
-                                        </div>
-                                       <div class="form-flex">
-                        
-                                        <div class="form-group">
-                                            <label for="address" class="lp">Address</label>
-                                            <input type="text" id="address" name="consignmentAddress" required placeholder="Address">
-                                        </div>
-                                       </div>
-                                        <button type="submit" class="bbp">Add Consignment</button>
-                                    </form>
-                                    <div id="message"></div>
-                                </div>
-                                </div>
-                                </div>
-							 </div>
-							  <script src="scripts.js"></script>
-
-
-
-                          
-
-                        </div>
-                    
-
-                    <!-- Content Row -->
-
-
-            </div>
+                                                </tbody>
+                                            </table>
+                                        </div> 
+                </div>
+                
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -398,7 +357,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
 
         </div>
         <!-- End of Content Wrapper -->
-
+			
     </div>
     <!-- End of Page Wrapper -->
 
@@ -421,7 +380,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn bg-gradient-danger text-gray-100" href="login.html">Logout</a>
+                    <a class="btn bg-gradient-danger text-gray-100" href="logout.jsp">Logout</a>
                 </div>
             </div>
         </div>

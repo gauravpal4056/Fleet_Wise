@@ -1,34 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%
-response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
+<%
+	System.out.println(session.getAttribute("user"));
+	if(session.getAttribute("user")==null || session.getAttribute("user").equals("admin")){
+		response.sendRedirect("login.jsp");	}
 %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@page import = "java.util.*" %>
-<%@page import="dao.HubDao" %>
-<%@page import="model.Hub" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.Route" %>
-<%@ page import="dao.HubDao" %>
-<%@ page import="utils.DBConnection" %>
  <%
 	LocalDate now = LocalDate.now();
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
     String formattedDate = now.format(formatter);
 %>
-<%
-	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+<%@page import="model.Driver" %>
+<%@page import="model.Vehicle" %>
+<%@page import="model.Route" %>
+<%@page import="model.Issue" %>
+<%@page import="model.Driver" %>
+<%@page import="model.Consignment" %>
+<%@page import="model.Vehicle" %>
 
-%>
+
+<%@page import="java.util.*" %>
+
+
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Insert title here</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -49,6 +49,11 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+    <style>
+    
+     
+    </style>
+
 
     
     <script>
@@ -59,7 +64,8 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
         </script>
 
 <link href="css/own.css" rel="stylesheet">
-<link rel="stylesheet" href="customcss/add-driver.css">
+
+
 </head>
 
 <body id="page-top">
@@ -71,7 +77,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
         <ul class="navbar-nav bg-gray-900 sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.jsp">
+             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="DriverDashboardServlet">
                 <div class="sidebar-brand-icon ">
                 	<img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 2.5rem;" src="img/logo.png" alt="...">
                     <!--  <i class="fas fa-laugh-wink"></i>-->
@@ -84,9 +90,9 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.jsp">
+                <a class="nav-link" href="DriverDashboardServlet">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Driver</span></a>
             </li>
 
             <!-- Divider -->
@@ -94,125 +100,77 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Options
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed " href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <span style="font-size: 16px; font-weight: bold" class="material-symbols-outlined">
+                <a class="nav-link collapsed" href="DriverConsignmentServlet" 
+                   >
+                    <span class="material-symbols-outlined">
                         inventory_2
                         </span>
-                    <span style="font-weight: bold">Consignment</span>
+                    <span>Consingments</span>
                 </a>
-                <div  id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="consignment-view.jsp">View All Consignment</a>
-                        <a class="collapse-item" href="consignment-add.jsp">Add Consignment</a>
-                        
-                    </div>
-                </div>
+                
             </li>
+
+
+            
+            
+         
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
-                    aria-expanded="true" aria-controls="collapseUtilities1">
+                <a class="nav-link collapsed" href="TripServlet" 
+                   >
+                    <span class="material-symbols-outlined">
+                       route
+                        </span>
+                    <span>Active Trip</span>
+                </a>
+                
+            </li>
+			<li class="nav-item">
+                <a class="nav-link collapsed" href="TripFetchServlet" 
+                   >
+                    <span class="material-symbols-outlined">
+                       route
+                        </span>
+                    <span>All Trips</span>
+                </a>
+                
+            </li>
+
+            
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities10"
+                    aria-expanded="true" aria-controls="collapseUtilities10">
                     <span class="material-symbols-outlined">
                         route
                         </span>
-                    <span style="font-weight: bold">Routes</span>
+                    <span>Issue</span>
                 </a>
-                <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities10" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="RouteServlet">View All Route</a>
-                        <a class="collapse-item" href="route-add">Add Route</a>
-                        						<a class="collapse-item" href="hub-add.jsp">Add Hub</a>
-                        
+                        <a class="collapse-item" href="IssueServlet">view all issues</a>
+                        <!-- <a class="collapse-item" href="utilities-other.html">Other</a> -->
                     </div>
                 </div>
             </li>
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                   <span class="sizeee"> <span class="material-symbols-outlined">
-                    local_shipping
-                    </span></span>
-                    <span style="font-weight: bold">Vehicle</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" href="vehicle-view.jsp">View Vehicle</a>
-                        <a class="collapse-item" href="vehicle-add.jsp">Add Vehicle</a>
-                    </div>
-                </div>
-            </li>
+       
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities2"
-                    aria-expanded="true" aria-controls="collapseUtilities2">
-                    <span class="material-symbols-outlined">
-                        id_card
-                        </span>
-                    <span style="font-weight: bold">Driver</span>
-                </a>
-                <div id="collapseUtilities2" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Driver Detail</h6>
-                        <a class="collapse-item" href="driver-view.jsp">View All Driver</a>
-                        <a class="collapse-item" href="driver-add.jsp">Add Driver</a>
-                    </div>
-                </div>
-            </li>
+     
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities4"
-                    aria-expanded="true" aria-controls="collapseUtilities4">
-                    <span class="material-symbols-outlined sizeee">
-                        airline_stops
-                        </span>
-                    <span style="font-weight: bold">Trip</span>
-                </a>
-                <div id="collapseUtilities4" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="TripFetchServletAdmin">View All Trip</a>
-                    </div>
-                </div>
-            </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities3"
-                    aria-expanded="true" aria-controls="collapseUtilities3">
-                    <span class="material-symbols-outlined">
-                        admin_panel_settings
-                        </span>
-                    <span style="font-weight: bold">Admin</span>
-                </a>
-                <div id="collapseUtilities3" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="admin-add.jsp">Add Admin</a>
-                    </div>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="AdminIssue" 
-                   >
-                    <span class="material-symbols-outlined">
-                       list
-                        </span>
-                    <span>Issues</span>
-                </a>
-                
-            </li>
+            <!-- Divider -->
+            <!-- <hr class="sidebar-divider"> -->
+
+          
+
         </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
@@ -227,7 +185,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                     </button>
 
                     <!-- Topbar Search -->
-                    <h1 style="font-weight: 900" class="text-gray-700">CONSIGNMENT</h1>
+                    <h1 style="font-weight: 900" class="text-gray-700">ISSUES</h1>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -294,112 +252,60 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                             </a>
                         </li>
                     </ul>
-                    
-
                 </nav>
                 <!-- End of Top bar -->
-
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+ 
                     <!-- Page Heading -->
 
                     <div class="text-center">
-                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-1" style="width: 15rem;" src="img/consign.jpg" alt="...">
+                         <img class="img-fluid px-1 px-sm-1 mt-1 mb-2" style="width: 25rem;" src="https://img.freepik.com/free-vector/business-man-depressed-stressed-watching-decrease-graph-stock-financial-trade-market-diagram_1150-39760.jpg?t=st=1711986724~exp=1711990324~hmac=7b61eac3d32022b19250289d226881833cd2e95ba0debd66b37dce48244f1fe7&w=996" alt="...">
                      </div>
-
-                    
-                    <div class="container-fluid">
-
-                    <!-- Page Heading -->
-
-                    <!-- Content Row -->
-                    <div class="row custom-div">
-
-                        <div class="col-lg-6 mb-4 custom-div-c">
-
-                            <!-- Illustrations -->
-    
-                            <div class="vehicle-form-con ">
-                                <div class="body-form vehicle-form">
-                      				<h4 style="margin-bottom:20px;" class="m-9 font-weight-bold ">create consignment</h4	>
-                                    <!-- Consignments Form -->
-                                    <form method="post" action="ConsignmentServlet" id="consignmentsForm">
-										<input class="d-none" style="display: hidden" name="type" value="create" />
-                                        <div class="form-flex">
-                                            <div class="form-group">
-                                                <label for="hubId" class="lp">Select Hub </label>
-                                                <select id="hubId" name="hubId">
-                                                	<% 
-											            DBConnection dbConnection = null;
-											            Connection connection = null;
-											            try {
-											                dbConnection = DBConnection.getDbConnnection(); // Get instance of DBConnection
-											                connection = dbConnection.getConnection(); // Get connection
-											                HubDao hubDao = new HubDao(dbConnection);
-											                List<Hub> hubs = hubDao.findAll(); // Assuming there's a method findAllRoutes() in your DAO
-											                for (Hub hub : hubs) {
-											        %>
-											            <option value="<%= hub.getHubId() %>"><%= hub.getHubName() %></option>
-											        <%
-											                }
-											            } catch (ClassNotFoundException | 	SQLException e) {
-											                e.printStackTrace();
-											            } 
-											        %>
-
-                                                </select>
-                                            </div>
-                        
-                                            <div class="form-group">
-                                                <label for="consignmentName" class="lp">Consignment Name</label>
-                                                <input type="text" id="consignmentName" name="consignmentName" required placeholder="Consignment Name">
-                                            </div>
-                                            
-                                        </div>
-                                       <div class="form-flex">
-                        
-                                        <div class="form-group">
-                                            <label for="address" class="lp">Address</label>
-                                            <input type="text" id="address" name="consignmentAddress" required placeholder="Address">
-                                        </div>
-                                       </div>
-                                        <button type="submit" class="bbp">Add Consignment</button>
-                                    </form>
-                                    <div id="message"></div>
-                                </div>
-                                </div>
-                                </div>
-							 </div>
-							  <script src="scripts.js"></script>
-
-
-
-                          
-
-                        </div>
-                    
+                     
+                     <div class="table-responsive">
+                           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                               <thead>
+                                   <tr>
+                                       <th>Issue id</th>
+                                       <th>Raised by</th>
+                                       <th>Consignment Name</th>
+                                       <th>Remarks</th>
+                                       <th>Description</th>
+										<th>Status </th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+	                                       
+			        <% 
+	               	List<Issue> is = (List<Issue>) request.getAttribute("issues"); // Assuming there's a method findAllRoutes() in your DAO
+	                if (is != null && is.size()!=0){
+	                for (Issue i: is) {
+	                	if(i.getConsignment()!=null){
+			        %> 
+			        	<tr>
+	                              <td><%= i.getIssueId()%></td>
+	                              <td><%= i.getDriver().getName() %></td>
+	                              <td><%= i.getConsignment().getConsignmentName() %></td>
+	                              <td><%= i.getRemarks() %></td>
+	                              <td><%= i.getDescription()%></td>
+	                              <td class="text-success" ><%= i.getStatus()%></td>
+	                             
+	                      	  		
+	                      	  	
+	                      	  </tr>
+	                      	  		
+			        <%
+			                
+	                		}}}
+			        %>
+	                                       </tbody>
+	                                   </table>
+	                               </div>
 
                     <!-- Content Row -->
-
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2024	</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
+                    
+    			</div>
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
@@ -421,10 +327,12 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn bg-gradient-danger text-gray-100" href="login.html">Logout</a>
+                    <a class="btn bg-gradient-danger text-gray-100" href="logout.jsp">Logout</a>
                 </div>
             </div>
         </div>
+        
+         
     </div>
 
     <!-- Bootstrap core JavaScript-->
@@ -443,6 +351,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+
 
 </body>
 

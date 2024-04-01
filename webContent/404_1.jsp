@@ -81,7 +81,7 @@ Resources1× 0.5× 0.25×Rerun
 <main>
   <h1>4<span><i class="fas fa-ghost"></i></span>4</h1>
   <h2>Error: 404 page not found</h2>
-  <p>Error occured, <%=request.getAttribute("message") %></p>
+  <p class="text-danger">Error occured, <%=request.getAttribute("message") %></p>
 
 </main>
 

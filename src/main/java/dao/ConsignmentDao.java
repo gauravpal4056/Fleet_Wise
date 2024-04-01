@@ -261,8 +261,7 @@ public class ConsignmentDao implements IDao<Consignment> {
 
     		try {
     			Connection connection = dbConnection.getConnection();
-    			PreparedStatement statement = connection.prepareStatement(
-    					"select consignment_id from consignments where hub_id = (select hub_id from hubs where route_id = (select route_id from trips where vehicle_id = (select vehicle_id from vehicles where driver_id = ?) ))");
+    			PreparedStatement statement = connection.prepareStatement("SELECT distinct c.consignment_id FROM consignments c JOIN hubs h ON c.hub_id = h.hub_id JOIN trips t ON h.route_id = t.route_id JOIN vehicles v ON t.vehicle_id = v.vehicle_id WHERE v.driver_id = ?");
     			statement.setInt(1, driverid);
     			ResultSet resultset = statement.executeQuery();
 
@@ -279,14 +278,109 @@ public class ConsignmentDao implements IDao<Consignment> {
     		return consignments;
 
     	}
+    
+    	public boolean scheduleOneConsignment(int vehicleid, int consignmentid, int routId) throws SQLException {
+	    	boolean res = true;
+	    	Connection connection = dbConnection.getConnection();
+	    	String query2 = "select TRIP_ID from trips where route_id = ? and vehicle_id = ? and remarks is null";
+	        PreparedStatement pstmt3 = connection.prepareStatement(query2);
+	        pstmt3.setInt(1, routId);
+	        pstmt3.setInt(2, vehicleid);
+	        
+	
+	        ResultSet rs = pstmt3.executeQuery();
+	        
+	        if (rs.next()) 
+	        {
+	        	System.out.println("existing trip found");
+	            int x = rs.getInt("TRIP_ID");
+	            String query4 = " update consignments set trip_id = ? where CONSIGNMENT_ID = ?  ";
+	            PreparedStatement pstmt4 = connection.prepareStatement(query4);
+	            pstmt4.setInt(1, x);
+	            pstmt4.setInt(2, consignmentid);
+	            
+	            int rowsAffected = pstmt4.executeUpdate();
+	            if (rowsAffected > 0) {
+	                System.out.println("trip inserted into consignment");
+	            } else {
+	            	res = false;
+	                System.out.println("Failed to insert trip into consignment");
+	            }
+            
+	            String upd_qry = " update consignments set STATUS = ? where CONSIGNMENT_ID = ?  ";
+	            PreparedStatement pstmt_upt = connection.prepareStatement(upd_qry);
+	            pstmt_upt.setString(1,"RECIEVED" );
+	            pstmt_upt.setInt(2, consignmentid);
+	            
+	            int r = pstmt_upt.executeUpdate();
+	
+	            if (r > 0) {
+	                System.out.println("consignment STATUS CHANGED");
+	            } else {
+	            	res = false;
+	                System.out.println("Failed to CHANGE the consignment status");
+	            }  
+	        } 
+	        else {
+	            String query = "insert into Trips (route_id, vehicle_id) values (?, ?)";
+	            try {
+	                PreparedStatement pstmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+	                pstmt.setInt(1, routId);
+	                pstmt.setInt(2, vehicleid);
+	                pstmt.executeUpdate();
+	                System.out.println("new trip created");
+	    		 	String query5 = "select TRIP_ID from trips where route_id = ? and vehicle_id = ?";
+	    	       PreparedStatement pstmt5 = connection.prepareStatement(query5);
+	    	        pstmt5.setInt(1, routId);
+	    	        pstmt5.setInt(2, vehicleid);
+	    	        ResultSet rset = pstmt5.executeQuery();
+	    	        if (rset.next()) 
+	    	        {
+	    	            int y = rset.getInt("TRIP_ID");
+		                System.out.println("created trip ID  " + y );
+	    	            String query6 = " update consignments set trip_id = ? where CONSIGNMENT_ID = ?  ";
+	    	            PreparedStatement pstmt6 = connection.prepareStatement(query6);
+	    	            pstmt6.setInt(1, y);
+	    	            pstmt6.setInt(2, consignmentid);
+	    	            int rowsAffected = pstmt6.executeUpdate();
+	    	            if (rowsAffected > 0) {
+	    	                System.out.println("trip inserted into consignment");
+	    	            } else {
+	    	            	res = false;
+	    	                System.out.println("Failed to insert trip");
+	    	            }
+	    	            String upd_qry2 = " update consignments set STATUS = ? where CONSIGNMENT_ID = ?  ";
+	    	            PreparedStatement pstmt_upt2 = connection.prepareStatement(upd_qry2);
+	    	            pstmt_upt2.setString(1,"RECIEVED" );
+	    	            pstmt_upt2.setInt(2, consignmentid);
+	    	            
+	    	            int rowno = pstmt_upt2.executeUpdate();
+	    	            if (rowno > 0) {
+	    	            	
+	    	            	
+	    	                System.out.println("consignment STATUS CHANGED to received");
+	    	            } else {
+	    	            	res = false;
+	    	                System.out.println("Failed  CHANGE the status");
+	    	            }
+	    	        }  
+    	        
+	            
+	            } catch (SQLException e) {
+	            	res = false;
+	                System.out.println("Error: " + e.getMessage());
+	                System.out.println("error creating trip ");
+	            }
+	        }
+        return res; 
+    }
 
     private Consignment extractConsignmentFromResultSet(ResultSet resultSet) throws SQLException {
         Consignment consignment = new Consignment();
         consignment.setConsignmentId(resultSet.getInt("consignment_Id"));
-        HubDao hubDao = new HubDao(dbConnection);
-        Hub hub = hubDao.findOne(resultSet.getInt("hub_Id"));
+        Hub hub = new Hub();
+        hub.setHubId(resultSet.getInt("hub_Id"));
         consignment.setHub(hub);
-        TripDao tripDao = new TripDao(dbConnection);
         Trip trip = new Trip();
         trip.setTripId(resultSet.getInt("trip_Id"));
         //Trip trip = tripDao.findOne(resultSet.getInt("trip_Id"));
