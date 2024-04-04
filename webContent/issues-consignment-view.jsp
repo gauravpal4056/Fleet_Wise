@@ -371,15 +371,7 @@ response.setHeader("Cache-Control", "no-cache, no-store,must-revalidate");
             </div>
         </div>
         
-         <div id="id01" class="w3-modal">	
-		    <div class="w3-modal-content">
-		      <div class="w3-container">
-		        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-		        <p class="text-success text-lg">Successfully Solved</p>
-		        <a class="btn btn-primary" href="AdminIssueConsignment" >OK</a>
-		      </div>
-		    </div>
-		  </div>
+         
     </div>
 
     <!-- Bootstrap core JavaScript-->

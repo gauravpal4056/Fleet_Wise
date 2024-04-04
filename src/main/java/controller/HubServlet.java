@@ -72,7 +72,7 @@ public class HubServlet extends HttpServlet {
 		        e.printStackTrace();
 		    }
 		    
-			response.sendRedirect("hub-view.jsp");
+			request.getRequestDispatcher("RouteServlet").forward(request, response);
 
 		}
 	

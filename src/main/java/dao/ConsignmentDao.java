@@ -378,8 +378,9 @@ public class ConsignmentDao implements IDao<Consignment> {
     private Consignment extractConsignmentFromResultSet(ResultSet resultSet) throws SQLException {
         Consignment consignment = new Consignment();
         consignment.setConsignmentId(resultSet.getInt("consignment_Id"));
-        Hub hub = new Hub();
-        hub.setHubId(resultSet.getInt("hub_Id"));
+        HubDao hDao = new HubDao(dbConnection);
+        Hub hub = hDao.findOne(resultSet.getInt("hub_Id"));
+        //hub.setHubId();
         consignment.setHub(hub);
         Trip trip = new Trip();
         trip.setTripId(resultSet.getInt("trip_Id"));

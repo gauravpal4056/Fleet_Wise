@@ -17,6 +17,13 @@
 	<meta charset="ISO-8859-1">
 	<title>Login</title>
 	<script src="https://cdn.tailwindcss.com"></script>
+	<meta charset="ISO-8859-1">
+	<title>Fleet Wise</title>
+    
+
+    <title>Fleet-Dashboard</title>
+
+
 	</head>
 	
 	<body>
@@ -54,7 +61,7 @@
 	            </div>
 	        </div>
 	      </section>
-	      <div id="bg-hero" class="transition-all  hidden md:block bg-[url('https://images.unsplash.com/photo-1485575301924-6891ef935dcd?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center w-2/3 h-full"></div>
+	      <div id="bg-hero" style="background: url('https://images.unsplash.com/photo-1485575301924-6891ef935dcd?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); background-position: bottom;" class="transition-all  hidden md:block bg-[url('https://images.unsplash.com/photo-1485575301924-6891ef935dcd?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-right w-2/3 h-full"></div>
 	    </div>
 	    
 	    
